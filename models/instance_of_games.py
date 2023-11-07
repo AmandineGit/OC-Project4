@@ -32,7 +32,7 @@ class Round:
     end_date = datetime.date
 
     def __init__(self, name, round_number, tournament_number, matchs_list=None, start_date="01/01/2000",
-                 end_date="01/01/2000"):
+                 end_date="01/01/2000", scores_list=None):
         self.name = name
         self.round_number = round_number
         self.tournament_number = tournament_number
@@ -41,12 +41,13 @@ class Round:
         self.matchs_list = matchs_list
         self.start_date = start_date
         self.end_date = end_date
+        if scores_list is None:
+            scores_list = []
+        self.scores_list = scores_list
 
     def __repr__(self):
         """ représentation de l objet de type Round """
         return self.name + " du tournoi n°" + str(self.tournament_number)
-
-
 
 class Match:
     """ Définition de la class Match """
