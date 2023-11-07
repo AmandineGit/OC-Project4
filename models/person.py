@@ -27,7 +27,7 @@ class User(Person):
 
 class Player(Person):
     """ Création de la sous_classe Player pour les players """
-    date_of_birth = datetime
+    date_of_birth = datetime.date
 
     def __init__(self, first_name, last_name, date_of_birth, national_chess_id=0, total_score=0):
         super().__init__(first_name, last_name)
