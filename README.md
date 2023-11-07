@@ -1,1 +1,1 @@
-test d'initialisation du répertoire !
+test d'initialisation du répertoire
