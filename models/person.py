@@ -14,5 +14,5 @@ class Player:
         self.total_score = total_score
 
     def __repr__(self):
-        """ représentation de l objet de type Person"""
+        """ représentation de l objet de type Player"""
         return self.first_name + " " + self.last_name
