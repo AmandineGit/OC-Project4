@@ -1,5 +1,5 @@
 """ Entry point."""
 
-from views.menu import View
+from controllers.base import Controllers
 
-View.prompt_main_menu()
+Controllers.main_menu()
