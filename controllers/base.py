@@ -1,9 +1,7 @@
 """ Define main controllers."""
 import json
-import sys
-sys.path.append("/home/mandine/PycharmProjects/OC-Project4/")
 from models.tournament import Tournament
-from models.person import Player
+from models.player import Player
 from views.menu import View
 
 
@@ -33,22 +31,25 @@ class Controllers:
         try:
             with open("tournament.json", "a") as f:
                 json.dump(tournament.__dict__, f)
+                f.write("\n")
         except Exception:
             print("Erreur lors de l'enregistrement du fichier tournament.json .")
         View.display_create_tournament(name)
+        Controllers.create_player()
 
     @staticmethod
     def create_player():
         datas = View.prompt_create_players()
-        if datas is None:
-            Controllers.main_menu()
-        else:
+        while datas is not None:
             first_name, last_name, date_of_birth = datas
             player = Player(first_name, last_name, date_of_birth)
-        try:
-            with open("players.json", "a") as f:
-                json.dump(player.__dict__, f)
-            View.display_create_player(first_name, last_name)
-        except Exception:
-            print("Erreur lors de l'enregistrement du joueur.\n")
+            try:
+                with open("players.json", "a") as f:
+                    json.dump(player.__dict__, f)
+                    f.write("\n")
+                View.display_create_player(first_name, last_name)
+                datas = View.prompt_create_players()
+            except Exception:
+                print("Erreur lors de l'enregistrement du joueur.\n")
+
         Controllers.main_menu()

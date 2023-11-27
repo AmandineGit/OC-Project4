@@ -29,7 +29,6 @@ class View:
 
     def display_create_tournament(self):
         print("\n===> Le tournoi '" + self + "' est enregistré")
-        View.prompt_create_players()
 
     @staticmethod
     def prompt_create_players():
@@ -38,7 +37,7 @@ class View:
         if lauch != "n" and lauch != "y":
             lauch = input("\nMerci de répondre par y pour yes ou n pour no\n"
                           "Voulez vous enregistrer un nouveau joueur ? y/n ")
-        while lauch == "y" :
+        while lauch == "y":
                 print("\nEnregistrement des joueurs")
                 first_name = input("\nVeuillez indiquer le prénom du joueur : ")
                 last_name = input("Veuillez indiquer le nom du joueur : ")
@@ -48,7 +47,7 @@ class View:
             return None
 
     def display_create_player(self, last_name):
-        print("\n===> Le joueur '" + self + " " + last_name + " est inscrit")
+        print("\n===> Le joueur " + self + " " + last_name + " est inscrit")
 
     @staticmethod
     def prompt_lauch_round():
