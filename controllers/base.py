@@ -41,15 +41,5 @@ class Controllers:
     def create_player():
         datas = View.prompt_create_players()
         while datas is not None:
-            first_name, last_name, date_of_birth = datas
-            player = Player(first_name, last_name, date_of_birth)
-            try:
-                with open("players.json", "a") as f:
-                    json.dump(player.__dict__, f)
-                    f.write("\n")
-                View.display_create_player(first_name, last_name)
-                datas = View.prompt_create_players()
-            except Exception:
-                print("Erreur lors de l'enregistrement du joueur.\n")
-
+            datas = Player.record_player(datas)
         Controllers.main_menu()
