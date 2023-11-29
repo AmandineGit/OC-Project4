@@ -1,5 +1,6 @@
 """ Define instance_of_games"""
 import datetime
+from models.file_json import JsonFile
 
 
 class Tournament:
@@ -25,3 +26,29 @@ class Tournament:
     def __repr__(self):
         """ représentation de l objet de type Tournament"""
         return self.name
+
+    def record_tournament(self, location):
+        """création d'un tournoi"""
+        tournament = Tournament(self, location)
+        json_file = tournament.__dict__
+        json_tournament = JsonFile("tournaments.json", json_file)
+        JsonFile.append_json(json_tournament)
+
+    def update_tournament(self):
+        """Mise à jour du tournoi dans le json"""
+        json_tournament = JsonFile("tournaments.json", [])
+        tournaments_list = JsonFile.read_json(json_tournament)
+        for i, tournament in enumerate(tournaments_list) :
+            if tournament.get("name") == self["name"]:
+                index = i
+        if index != -1:
+            tournaments_list[index]=self
+        json_tournament.datas_json = tournaments_list
+        JsonFile.create_json(json_tournament)
+
+
+
+
+
+
+

@@ -5,7 +5,7 @@ class View:
     """Vue du menu principal"""
 
     @staticmethod
-    def main_menu():
+    def display_main_menu():
         """Affichage du menu principal et  prompt pour sélectionner un sous menu"""
         print("Gestion des tournois\n")
         print("1. Créer un tournoi")
@@ -38,11 +38,11 @@ class View:
             lauch = input("\nMerci de répondre par y pour yes ou n pour no\n"
                           "Voulez vous enregistrer un nouveau joueur ? y/n ")
         while lauch == "y":
-                print("\nEnregistrement des joueurs")
-                first_name = input("\nVeuillez indiquer le prénom du joueur : ")
-                last_name = input("Veuillez indiquer le nom du joueur : ")
-                date_of_birth = input("Veuillez indiquer la date de naissance du joueur sous le format jj/mm/yy : ")
-                return first_name, last_name, date_of_birth
+            print("\nEnregistrement des joueurs")
+            first_name = input("\nVeuillez indiquer le prénom du joueur : ")
+            last_name = input("Veuillez indiquer le nom du joueur : ")
+            date_of_birth = input("Veuillez indiquer la date de naissance du joueur sous le format jj/mm/yy : ")
+            return first_name, last_name, date_of_birth
         else:
             return None
 

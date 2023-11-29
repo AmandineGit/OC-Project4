@@ -1,8 +1,8 @@
 """ Define main controllers."""
-import json
 from models.tournament import Tournament
 from models.player import Player
 from views.menu import View
+from models.file_json import JsonFile
 
 
 class Controllers:
@@ -10,7 +10,7 @@ class Controllers:
     @staticmethod
     def main_menu():
         """Prompt pour sélectionner un sous menu"""
-        choice = View.main_menu()
+        choice = View.display_main_menu()
         while choice != 1 and choice != 2 and choice != 5 and choice != 6:
             print("Veuillez saisir un numéro existant.")
             choice = input("Veuillez entrer le numéro de l'action voulue : ")
@@ -18,7 +18,8 @@ class Controllers:
         if choice == 1:
             Controllers.create_tournament()
         elif choice == 2:
-            Controllers.create_player()
+            datas = View.prompt_create_players()
+            Controllers.create_players(datas)
         elif choice == 5:
             View.prompt_lauch_round()
         elif choice == 6:
@@ -27,19 +28,41 @@ class Controllers:
     @staticmethod
     def create_tournament():
         name, location = View.prompt_create_tournament()
-        tournament = Tournament(name, location)
-        try:
-            with open("tournament.json", "a") as f:
-                json.dump(tournament.__dict__, f)
-                f.write("\n")
-        except Exception:
-            print("Erreur lors de l'enregistrement du fichier tournament.json .")
+        Tournament.record_tournament(name, location)
         View.display_create_tournament(name)
-        Controllers.create_player()
-
-    @staticmethod
-    def create_player():
         datas = View.prompt_create_players()
-        while datas is not None:
-            datas = Player.record_player(datas)
+
+    def create_players(self):
+        datas = self
+        player_exist = Player.search_player(datas)
+        if player_exist is True:
+            Controllers.registrer_player_tournament(self)
+        else:
+            Controllers.create_players(datas)
+            while datas is not None:
+                first_name, last_name, date_of_birth = datas
+                player = Player(first_name, last_name, date_of_birth)
+                datas = Player.record_player(player, "players.json")
+            Controllers.registrer_player_tournament(self)
         Controllers.main_menu()
+
+    def registrer_player_tournament(self):
+        """Ajouter un player dans un tournoi
+        Rechercher le tournoi en cours
+        Ajouter le player dans la liste de players du tournoi"""
+
+        json_tournament = JsonFile("tournaments.json", [])
+        tournaments = JsonFile.read_json(json_tournament)
+        for tournament in tournaments:
+            if tournament.get("end_date") == "01/01/2000"\
+                    and tournament.get("start_date") != "01/01/2000":
+                players_list = tournament["registred_players_list"]
+                players_list.append([self[0], self[1]])
+                tournament["registred_players_list"] = players_list
+                for tournamentnew in tournaments:
+                    if tournamentnew.get("name") == tournament["name"]:
+                        tournamentnew["registred_players_list"] = tournament["registred_players_list"]
+                        Tournament.update_tournament(tournamentnew)
+        View.display_create_player(self[0], self[1])
+        datas = View.prompt_create_players()
+        return datas
