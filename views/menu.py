@@ -28,6 +28,7 @@ class View:
         return tournament_name, tournament_location
 
     def display_create_tournament(self):
+        """Affiche un message confirmant la création du tournoi"""
         print("\n===> Le tournoi '" + self + "' est enregistré")
 
     @staticmethod
@@ -37,7 +38,7 @@ class View:
         if lauch != "n" and lauch != "y":
             lauch = input("\nMerci de répondre par y pour yes ou n pour no\n"
                           "Voulez vous enregistrer un nouveau joueur ? y/n ")
-        while lauch == "y":
+        elif lauch == "y":
             print("\nEnregistrement des joueurs")
             first_name = input("\nVeuillez indiquer le prénom du joueur : ")
             last_name = input("Veuillez indiquer le nom du joueur : ")
@@ -46,8 +47,13 @@ class View:
         else:
             return None
 
+    def display_register_player(self, last_name):
+        """Affiche un message confirmant l'inscription du player"""
+        print("\n===> Le joueur " + self + " " + last_name + " est inscrit au tournoi en cours.")
+
     def display_create_player(self, last_name):
-        print("\n===> Le joueur " + self + " " + last_name + " est inscrit")
+        """Affiche un message confirmant l'inscription du player"""
+        print("\n===> Le joueur " + self + " " + last_name + " est enregistré dans la base de joueurs.")
 
     @staticmethod
     def prompt_lauch_round():

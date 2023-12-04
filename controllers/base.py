@@ -18,8 +18,7 @@ class Controllers:
         if choice == 1:
             Controllers.create_tournament()
         elif choice == 2:
-            datas = View.prompt_create_players()
-            Controllers.create_players(datas)
+            Controllers.create_players()
         elif choice == 5:
             View.prompt_lauch_round()
         elif choice == 6:
@@ -32,24 +31,25 @@ class Controllers:
         View.display_create_tournament(name)
         datas = View.prompt_create_players()
 
-    def create_players(self):
-        datas = self
-        player_exist = Player.search_player(datas)
-        if player_exist is True:
-            Controllers.registrer_player_tournament(self)
-        else:
-            Controllers.create_players(datas)
-            while datas is not None:
-                first_name, last_name, date_of_birth = datas
+    def create_players():
+        datas = View.prompt_create_players()
+        while datas is not None:
+            first_name, last_name, date_of_birth = datas
+            player_exist = Player.search_player(datas)
+            if player_exist is True:
+                 Controllers.registrer_player_tournament(datas)
+            else:
                 player = Player(first_name, last_name, date_of_birth)
-                datas = Player.record_player(player, "players.json")
-            Controllers.registrer_player_tournament(self)
+                dataswip = datas
+                Player.record_player(player, "players.json")
+                Controllers.registrer_player_tournament(dataswip)
+            datas = View.prompt_create_players()
         Controllers.main_menu()
 
     def registrer_player_tournament(self):
         """Ajouter un player dans un tournoi
         Rechercher le tournoi en cours
-        Ajouter le player dans la liste de players du tournoi"""
+        Ajouter le player dans la liste de players du tournoi grace à la methode updat_tournament"""
 
         json_tournament = JsonFile("tournaments.json", [])
         tournaments = JsonFile.read_json(json_tournament)
@@ -63,6 +63,4 @@ class Controllers:
                     if tournamentnew.get("name") == tournament["name"]:
                         tournamentnew["registred_players_list"] = tournament["registred_players_list"]
                         Tournament.update_tournament(tournamentnew)
-        View.display_create_player(self[0], self[1])
-        datas = View.prompt_create_players()
-        return datas
+                View.display_register_player(self[0], self[1])
