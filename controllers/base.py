@@ -11,7 +11,8 @@ class Controllers:
     @staticmethod
     def main_menu():
         """Gestion des sous menu"""
-        choice = View.display_main_menu()
+        View.display_main_menu()
+        choice = View.prompt_main_menu()
         while choice != 1 and choice != 2 and choice != 3 and choice != 5 and choice != 6:
             print("Veuillez saisir un numéro existant.")
             choice = input("Veuillez entrer le numéro de l'action voulue : ")
@@ -58,17 +59,30 @@ class Controllers:
 
     @staticmethod
     def create_players():
-        """Création et enregistrement de users"""
-        datas = View.prompt_create_players()
+        """Création et enregistrement sur un tournoi de users"""
+        tournament_exist = False
+        while tournament_exist != True:
+            lauch = View.prompt_create_players()
+            if lauch != "n" and lauch != "y" and lauch != "x":
+                lauch = input("\nMerci de répondre par y pour yes ou n pour no"
+                          "\nVoulez vous enregistrer un nouveau joueur ? y/n "
+                              "\nPour revenir au menu principal taper x.")
+            elif lauch == "x":
+                Controllers.main_menu()
+            elif lauch == "y":
+                datas = View.prompt_datas_player()
+                first_name, last_name, date_of_birth, tournament_name = datas
+                tournament_exist = Tournament.search_tournament(tournament_name)
+                if tournament_exist != True:
+                    View.display_error_tournament(tournament_name)
         while datas is not None:
-            first_name, last_name, date_of_birth, tournament_name = datas
             datas_player = first_name, last_name, date_of_birth
             player_exist = Player.search_player(datas_player)
             if player_exist is True:
                  Controllers.registrer_player_tournament(datas)
             else:
                 player = Player(first_name, last_name, date_of_birth)
-                dataswip = datas_player
+                dataswip = datas
                 Player.record_player(player, "players.json")
                 Controllers.registrer_player_tournament(dataswip)
             datas = View.prompt_create_players()

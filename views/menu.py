@@ -7,7 +7,7 @@ class View:
 
     @staticmethod
     def display_main_menu():
-        """Affichage du menu principal et  prompt pour sélectionner un sous menu"""
+        """Affichage du menu principal des sous menus"""
         print("Gestion des tournois\n")
         print("1. Créer un tournoi")
         print("2. Inscrire des joueurs à un tournoi")
@@ -16,6 +16,10 @@ class View:
         print("5. Lancer un round")
         print("6. Cloturer un round")
         print("7. Afficher un rapport\n")
+
+    @staticmethod
+    def prompt_main_menu():
+        """prompt pour sélectionner un sous menu"""
         main_menu_number = input("Veuillez entrer le numéro de l'action voulue : ")
         main_menu_number = int(main_menu_number)
         return main_menu_number
@@ -33,29 +37,6 @@ class View:
         print("\n===> Le tournoi '" + self + "' est enregistré")
 
     @staticmethod
-    def prompt_create_players():
-        """Prompt pour créer un player ou plusieurs"""
-        lauch = input("\nVoulez vous enregistrer un nouveau joueur ? y/n ")
-        if lauch != "n" and lauch != "y":
-            lauch = input("\nMerci de répondre par y pour yes ou n pour no\n"
-                          "Voulez vous enregistrer un nouveau joueur ? y/n ")
-        elif lauch == "y":
-            print("\nEnregistrement des joueurs")
-            first_name = input("\nVeuillez indiquer le prénom du joueur : ")
-            last_name = input("Veuillez indiquer le nom du joueur : ")
-            date_of_birth = View.test_date(input("Veuillez indiquer la date de naissance du "
-                                                            "joueur sous le format jj/mm/yy : "))
-            tournament_exist = False
-            while tournament_exist != True:
-                tournament_name = input("Veuillez indiquer le nom du tournoi : ")
-                tournament_exist = Tournament.search_tournament(tournament_name)
-                if tournament_exist == False :
-                    print("Le tournoi " + tournament_name + " n'existe pas.")
-            return first_name, last_name, date_of_birth, tournament_name
-        else:
-            return None
-
-    @staticmethod
     def prompt_open_tournament():
         """Prompt pour selectionner le tournoi et receuillir la date de début d'ouverture """
         tournament_name = input("Veuillez entrer le nom du tournoi :")
@@ -63,6 +44,23 @@ class View:
 
         datas_open_tournament = [tournament_name, open_date_tournament]
         return datas_open_tournament
+
+    @staticmethod
+    def prompt_create_players():
+        """Prompt pour gérer la création d'un ou de plusieurs users"""
+        lauch = input("\nVoulez vous enregistrer un nouveau joueur ? y/n "
+                      "\nPour revenir au menu principal taper x.\n")
+        return lauch
+
+    @staticmethod
+    def prompt_datas_player():
+        print("\nEnregistrement des joueurs")
+        first_name = input("\nVeuillez indiquer le prénom du joueur : ")
+        last_name = input("Veuillez indiquer le nom du joueur : ")
+        date_of_birth = View.test_date(input("Veuillez indiquer la date de naissance du "
+                                                            "joueur sous le format jj/mm/yy : "))
+        tournament_name = input("Veuillez indiquer le nom du tournoi : ")
+        return first_name, last_name, date_of_birth, tournament_name
 
     @staticmethod
     def prompt_lauch_round():
@@ -79,6 +77,9 @@ class View:
     def display_create_player(self, last_name):
         """Affiche un message confirmant l'inscription du player"""
         print("\n===> Le joueur " + self + " " + last_name + " est enregistré dans la base de joueurs.")
+
+    def display_error_tournament(self):
+        print("Le tournoi " + self + " n'existe pas.")
 
     def display_open_tournament(self, start_date):
         print('le tournoi "' + self + '" est ouvert.')
