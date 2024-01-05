@@ -39,21 +39,24 @@ class View:
     @staticmethod
     def prompt_open_tournament():
         """Prompt pour selectionner le tournoi et receuillir la date de début d'ouverture """
-        tournament_name = input("Veuillez entrer le nom du tournoi :")
-        open_date_tournament = View.test_date(input("Veuillez entrer la date de début du tournoi : "))
-
-        datas_open_tournament = [tournament_name, open_date_tournament]
-        return datas_open_tournament
+        tournament_name = input("Veuillez entrer le nom du tournoi \n(taper x pour revnir au menu principal) :")
+        if tournament_name == "x":
+            return tournament_name
+        if tournament_name != "x":
+            open_date_tournament = View.test_date(input("Veuillez entrer la date de début du tournoi : "))
+            datas_open_tournament = [tournament_name, open_date_tournament]
+            return datas_open_tournament
 
     @staticmethod
     def prompt_create_players():
         """Prompt pour gérer la création d'un ou de plusieurs users"""
         lauch = input("\nVoulez vous enregistrer un nouveau joueur ? y/n "
-                      "\nPour revenir au menu principal taper x.\n")
+                      "\n(taper x pour revenir au menu principal.")
         return lauch
 
     @staticmethod
     def prompt_datas_player():
+        """Prompt pour récupéré les données d'un user à inscrire"""
         print("\nEnregistrement des joueurs")
         first_name = input("\nVeuillez indiquer le prénom du joueur : ")
         last_name = input("Veuillez indiquer le nom du joueur : ")
@@ -79,12 +82,30 @@ class View:
         print("\n===> Le joueur " + self + " " + last_name + " est enregistré dans la base de joueurs.")
 
     def display_error_tournament(self):
+        """Affiche un message indiquant que le tournoi n'existe pas"""
         print("Le tournoi " + self + " n'existe pas.")
 
     def display_open_tournament(self, start_date):
+        """Affiche un message confirmant l'ouverture du tournoi"""
         print('le tournoi "' + self + '" est ouvert.')
 
+    @staticmethod
+    def display_error_menu():
+        """Affiche un message indiquant une erreur sur le choix du sous menu"""
+        print("Veuillez saisir un numéro existant.")
+
+    @staticmethod
+    def display_error_tournamentinprogress():
+        """Affiche un message indiquant qu'un tournoi est deja en cours"""
+        print("Un tournoi est déjà en cours, vous ne pouvez pas en ouvrir un second.\n")
+
+    @staticmethod
+    def display_error_choisecreateuser():
+        """Affiche un message indiquant une erreur sur le choix"""
+        print("\nMerci de répondre par y pour yes ou n pour no")
+
     def test_date(self):
+        """Valide la saisie d'une date"""
         date_str = self
         test = False
         while test is False:

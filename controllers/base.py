@@ -14,8 +14,8 @@ class Controllers:
         View.display_main_menu()
         choice = View.prompt_main_menu()
         while choice != 1 and choice != 2 and choice != 3 and choice != 5 and choice != 6:
-            print("Veuillez saisir un numéro existant.")
-            choice = input("Veuillez entrer le numéro de l'action voulue : ")
+            View.display_error_menu()
+            choice = View.prompt_main_menu()
             choice = int(choice)
         if choice == 1:
             Controllers.create_tournament()
@@ -39,22 +39,31 @@ class Controllers:
     @staticmethod
     def open_tournament():
         """Démarre un tournoi"""
-        its_ok = False
-        while its_ok == False :
+        its_ok = 0
+        while its_ok != 1 :
             datas_open_tournament = View.prompt_open_tournament()
-            open_date = str(datas_open_tournament[1])
-            tournament_name = (datas_open_tournament[0])
-            json_tournament = JsonFile("tournaments.json", [])
-            tournaments = JsonFile.read_json(json_tournament)
-            for tournament in tournaments:
-                if tournament.get("name") == datas_open_tournament[0]:
+            if datas_open_tournament == "x":
+                Controllers.main_menu()
+            else:
+                open_date = str(datas_open_tournament[1])
+                tournament_name = (datas_open_tournament[0])
+                json_tournament = JsonFile("tournaments.json", [])
+                tournaments = JsonFile.read_json(json_tournament)
+                for tournament in tournaments:
+                    if tournament.get("name") == datas_open_tournament[0]:
+                        its_ok = its_ok + 1
+                    if (tournament.get("start_date") != "01/01/2000"
+                            and tournament.get("start_date") != "01/01/2000"):
+                        its_ok = its_ok + 10
+                if its_ok == 0 or (its_ok % 10) == 0:
+                    View.display_error_tournament(tournament_name)
+                if its_ok >= 11:
+                    View.display_error_tournamentinprogress()
+                if its_ok == 1 :
                     tournament["start_date"] = datas_open_tournament[1]
                     Tournament.update_tournament(tournament)
                     View.display_open_tournament(tournament_name, open_date)
-                    its_ok = True
                     Controllers.create_players()
-            if its_ok == False:
-                print("Veuillez entrer le nom d'un tournoi existant.")
         Controllers.main_menu()
 
     @staticmethod
@@ -64,9 +73,7 @@ class Controllers:
         while tournament_exist != True:
             lauch = View.prompt_create_players()
             if lauch != "n" and lauch != "y" and lauch != "x":
-                lauch = input("\nMerci de répondre par y pour yes ou n pour no"
-                          "\nVoulez vous enregistrer un nouveau joueur ? y/n "
-                              "\nPour revenir au menu principal taper x.")
+                View.display_error_choisecreateuser()
             elif lauch == "x":
                 Controllers.main_menu()
             elif lauch == "y":
