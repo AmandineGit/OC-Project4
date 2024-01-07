@@ -20,9 +20,9 @@ class Controllers:
         if choice == 1:
             Controllers.create_tournament()
         elif choice == 2:
-            Controllers.create_players()
-        elif choice == 3:
             Controllers.open_tournament()
+        elif choice == 3:
+            Controllers.create_players()
         elif choice == 5:
             View.prompt_lauch_round()
         elif choice == 6:
@@ -39,48 +39,43 @@ class Controllers:
     @staticmethod
     def open_tournament():
         """Démarre un tournoi"""
-        its_ok = 0
-        while its_ok != 1 :
-            datas_open_tournament = View.prompt_open_tournament()
-            if datas_open_tournament == "x":
-                Controllers.main_menu()
+        datas_open_tournament = View.prompt_open_tournament()
+        if datas_open_tournament == "x":
+            Controllers.main_menu()
+        else:
+            if Tournament.current_tournament() is not None:
+                View.display_error_tournamentinprogress()
             else:
                 open_date = str(datas_open_tournament[1])
                 tournament_name = (datas_open_tournament[0])
-                json_tournament = JsonFile("tournaments.json", [])
-                tournaments = JsonFile.read_json(json_tournament)
-                for tournament in tournaments:
-                    if tournament.get("name") == datas_open_tournament[0]:
-                        its_ok = its_ok + 1
-                    if (tournament.get("start_date") != "01/01/2000"
-                            and tournament.get("start_date") != "01/01/2000"):
-                        its_ok = its_ok + 10
-                if its_ok == 0 or (its_ok % 10) == 0:
+                if Tournament.search_tournament(tournament_name) is True:
+                    json_tournament = JsonFile("tournaments.json", [])
+                    tournaments = JsonFile.read_json(json_tournament)
+                    for tournament in tournaments:
+                        if tournament.get("name") == datas_open_tournament[0]:
+                            tournament["start_date"] = datas_open_tournament[1]
+                            Tournament.update_tournament(tournament)
+                            View.display_open_tournament(tournament_name, open_date)
+                            Controllers.create_players()
+                else :
                     View.display_error_tournament(tournament_name)
-                if its_ok >= 11:
-                    View.display_error_tournamentinprogress()
-                if its_ok == 1 :
-                    tournament["start_date"] = datas_open_tournament[1]
-                    Tournament.update_tournament(tournament)
-                    View.display_open_tournament(tournament_name, open_date)
-                    Controllers.create_players()
         Controllers.main_menu()
 
     @staticmethod
     def create_players():
         """Création et enregistrement sur un tournoi de users"""
         tournament_exist = False
-        while tournament_exist != True:
+        while tournament_exist is False:
             lauch = View.prompt_create_players()
-            if lauch != "n" and lauch != "y" and lauch != "x":
+            if lauch != "n" and lauch != "y":
                 View.display_error_choisecreateuser()
-            elif lauch == "x":
+            elif lauch == "n":
                 Controllers.main_menu()
             elif lauch == "y":
                 datas = View.prompt_datas_player()
                 first_name, last_name, date_of_birth, tournament_name = datas
                 tournament_exist = Tournament.search_tournament(tournament_name)
-                if tournament_exist != True:
+                if tournament_exist is False:
                     View.display_error_tournament(tournament_name)
         while datas is not None:
             datas_player = first_name, last_name, date_of_birth
@@ -112,3 +107,6 @@ class Controllers:
                         Tournament.update_tournament(tournamentnew)
                 View.display_register_player(self[0], self[1], self[3])
 
+    @staticmethod
+    def lauch_round():
+        """Lancer un round"""

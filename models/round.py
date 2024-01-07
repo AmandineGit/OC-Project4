@@ -7,8 +7,8 @@ class Round:
     start_date = datetime.date
     end_date = datetime.date
 
-    def __init__(self, name, matchs_list=None, start_date="01/01/2000",
-                 end_date="01/01/2000"):
+    def __init__(self, name, matchs_list=None, start_date="01/01/2000 12:00",
+                 end_date="01/01/2000 12:00"):
         self.name = name
         if matchs_list is None:
             matchs_list = []

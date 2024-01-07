@@ -10,8 +10,8 @@ class View:
         """Affichage du menu principal des sous menus"""
         print("Gestion des tournois\n")
         print("1. Créer un tournoi")
-        print("2. Inscrire des joueurs à un tournoi")
-        print("3. Ouvrir un tournoi")
+        print("2. Ouvrir un tournoi")
+        print("3. Inscrire des joueurs à un tournoi")
         print("4. Cloturer un tournoi")
         print("5. Lancer un round")
         print("6. Cloturer un round")
@@ -50,8 +50,7 @@ class View:
     @staticmethod
     def prompt_create_players():
         """Prompt pour gérer la création d'un ou de plusieurs users"""
-        lauch = input("\nVoulez vous enregistrer un nouveau joueur ? y/n "
-                      "\n(taper x pour revenir au menu principal.")
+        lauch = input("\nVoulez vous enregistrer un nouveau joueur ? y/n ")
         return lauch
 
     @staticmethod

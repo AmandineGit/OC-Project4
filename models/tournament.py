@@ -59,6 +59,13 @@ class Tournament:
                 return True
         return False
 
-
-
+    def current_tournament():
+        """recherche et renvoi le tournoi en cours"""
+        json_tournament = JsonFile("tournaments.json", [])
+        tournaments = JsonFile.read_json(json_tournament)
+        for tournament in tournaments:
+            if (tournament.get("start_date") != "01/01/2000"
+                    and tournament.get("start_date") != "01/01/2000"):
+                current_tournament = tournament.get("name")
+                return current_tournament
 
