@@ -1,5 +1,6 @@
 """ Define main controllers."""
 from models.tournament import Tournament
+from models.round import Round
 from models.player import Player
 from views.menu import View
 from models.file_json import JsonFile
@@ -110,3 +111,11 @@ class Controllers:
     @staticmethod
     def lauch_round():
         """Lancer un round"""
+        current_tournament = (Tournament.current_tournament())
+        last_round = Round.number_of_round(current_tournament)
+        if last_round == 0:
+            """lancer l'initialisation"""
+            return
+        else:
+            """créer un nouveau round"""
+            return
