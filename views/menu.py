@@ -66,7 +66,8 @@ class View:
 
     @staticmethod
     def prompt_lauch_round():
-        print("test2")
+        lauch = input("Voulez-vous lancer un nouveau round ? y/n ")
+        return lauch
 
     @staticmethod
     def prompt_finish_roud():
@@ -93,13 +94,17 @@ class View:
         """Affiche un message indiquant une erreur sur le choix du sous menu"""
         print("Veuillez saisir un numéro existant.")
 
+    def display_tournament_already_exist(self):
+        """Affiche un message d'erreur car le tournoi existe déjà"""
+        print('le tournoi "' + self + '" existe déjà.\n')
+
     @staticmethod
     def display_error_tournamentinprogress():
         """Affiche un message indiquant qu'un tournoi est deja en cours"""
         print("Un tournoi est déjà en cours, vous ne pouvez pas en ouvrir un second.\n")
 
     @staticmethod
-    def display_error_choisecreateuser():
+    def display_error_choise():
         """Affiche un message indiquant une erreur sur le choix"""
         print("\nMerci de répondre par y pour yes ou n pour no")
 

@@ -4,6 +4,7 @@ from models.round import Round
 from models.player import Player
 from views.menu import View
 from models.file_json import JsonFile
+from datetime import datetime
 
 
 
@@ -25,7 +26,7 @@ class Controllers:
         elif choice == 3:
             Controllers.create_players()
         elif choice == 5:
-            View.prompt_lauch_round()
+            Controllers.lauch_round()
         elif choice == 6:
             View.prompt_finish_roud()
 
@@ -33,8 +34,11 @@ class Controllers:
     def create_tournament():
         """Création d'un tournoi"""
         name, location = View.prompt_create_tournament()
-        Tournament.record_tournament(name, location)
-        View.display_create_tournament(name)
+        tournament_exist = Tournament.record_tournament(name, location)
+        if tournament_exist is False:
+            View.display_create_tournament(name)
+        elif tournament_exist is True:
+            View.display_tournament_already_exist(name)
         Controllers.main_menu()
 
     @staticmethod
@@ -69,7 +73,7 @@ class Controllers:
         while tournament_exist is False:
             lauch = View.prompt_create_players()
             if lauch != "n" and lauch != "y":
-                View.display_error_choisecreateuser()
+                View.display_error_choise()
             elif lauch == "n":
                 Controllers.main_menu()
             elif lauch == "y":
@@ -111,11 +115,21 @@ class Controllers:
     @staticmethod
     def lauch_round():
         """Lancer un round"""
-        current_tournament = (Tournament.current_tournament())
-        last_round = Round.number_of_round(current_tournament)
-        if last_round == 0:
-            """lancer l'initialisation"""
-            return
-        else:
-            """créer un nouveau round"""
-            return
+        lauch = View.prompt_lauch_round()
+        if lauch != "n" and lauch != "y":
+            View.display_error_choise()
+        elif lauch == "n":
+            Controllers.main_menu()
+        elif lauch == "y":
+            current_tournament = (Tournament.current_tournament())
+            last_round = Round.last_number_of_round(current_tournament)
+            if last_round == 0:
+                """lancer l'initialisation"""
+                current_date = datetime.now()
+                current_date = current_date.strftime('%w/%m/%Y %H:%M')
+                current_round = Round(name="Round1", start_date=current_date)
+                print(current_round.start_date)
+                return
+            else:
+                """créer un nouveau round"""
+                return
