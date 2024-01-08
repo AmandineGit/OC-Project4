@@ -71,3 +71,12 @@ class Tournament:
                     and tournament.get("start_date") != "01/01/2000"):
                 current_tournament = tournament
                 return current_tournament
+
+    def last_number_of_round(self):
+        """Recherche et renvoi le numéro du dernier round d'un tournoi"""
+        json_tournament = JsonFile("tournaments.json", [])
+        tournaments = JsonFile.read_json(json_tournament)
+        for tournament in tournaments:
+            if tournament.get("name") == self:
+                last_round_number = tournament.get("current_round_number")
+                return last_round_number

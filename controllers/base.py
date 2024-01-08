@@ -5,6 +5,7 @@ from models.player import Player
 from views.menu import View
 from models.file_json import JsonFile
 from datetime import datetime
+import os
 
 
 
@@ -123,13 +124,23 @@ class Controllers:
         elif lauch == "y":
             current_date = datetime.now()
             current_date = current_date.strftime('%w/%m/%Y %H:%M')
-            round = Round.record_round("Round13", current_date)
+            last_round = Round.last_number_of_round()
+            if os.path.exists("rounds.json"):
+                """génération du nom du round"""
+                last_number = last_round[-2:]
+                last_number = int(last_number)
+                current_number = last_number + 1
+                str(current_number)
+                current_number = str(current_number)
+                round_name = "Round" + current_number
+            else:
+                round_name = "Round1"
+            round = Round.record_round(round_name, current_date)
             current_tournament = (Tournament.current_tournament())
-            last_round = Round.last_number_of_round(current_tournament.get("name"))
+            last_round_in_tournament = Tournament.last_number_of_round(current_tournament.get("name"))
             current_tournament["rounds_list"].append(round.name)
-            print(current_tournament)
             Tournament.update_tournament(current_tournament)
-            if last_round == 0:
+            if last_round_in_tournament == 0:
                 """lancer l'initialisation"""
                 return
             else:

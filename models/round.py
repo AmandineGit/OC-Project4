@@ -21,14 +21,12 @@ class Round:
         """ représentation de l objet de type Round """
         return self.name
 
-    def last_number_of_round(self):
-        """Recherche et renvoi le numéro du dernier round terminé"""
-        json_tournament = JsonFile("tournaments.json", [])
-        tournaments = JsonFile.read_json(json_tournament)
-        for tournament in tournaments:
-            if tournament.get("name") == self:
-                last_round_number = tournament.get("current_round_number")
-                return last_round_number
+    @staticmethod
+    def last_number_of_round():
+        """Recherche et renvoi le numéro du dernier round d'un tournoi"""
+        json_rounds = JsonFile("rounds.json", [])
+        rounds = JsonFile.read_json(json_rounds)
+        return (rounds[-1]["name"])
 
     def record_round(self, start_date):
         """création d'un round  """
