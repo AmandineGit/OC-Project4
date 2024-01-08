@@ -121,14 +121,16 @@ class Controllers:
         elif lauch == "n":
             Controllers.main_menu()
         elif lauch == "y":
+            current_date = datetime.now()
+            current_date = current_date.strftime('%w/%m/%Y %H:%M')
+            round = Round.record_round("Round13", current_date)
             current_tournament = (Tournament.current_tournament())
-            last_round = Round.last_number_of_round(current_tournament)
+            last_round = Round.last_number_of_round(current_tournament.get("name"))
+            current_tournament["rounds_list"].append(round.name)
+            print(current_tournament)
+            Tournament.update_tournament(current_tournament)
             if last_round == 0:
                 """lancer l'initialisation"""
-                current_date = datetime.now()
-                current_date = current_date.strftime('%w/%m/%Y %H:%M')
-                current_round = Round(name="Round1", start_date=current_date)
-                print(current_round.start_date)
                 return
             else:
                 """créer un nouveau round"""

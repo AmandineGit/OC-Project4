@@ -28,7 +28,7 @@ class Tournament:
         return self.name
 
     def record_tournament(self, location):
-        """création d'un tournoi"""
+        """création d'un tournoiec test d'existance préalable """
         tournament_exist = Tournament.search_tournament(self)
         if tournament_exist is False:
             tournament = Tournament(self, location)
@@ -40,14 +40,15 @@ class Tournament:
             return tournament_exist
 
     def update_tournament(self):
-        """Mise à jour du tournoi dans le json"""
+        """Mise à jour du tournoi en cours dans le json"""
         json_tournament = JsonFile("tournaments.json", [])
         tournaments_list = JsonFile.read_json(json_tournament)
-        for i, tournament in enumerate(tournaments_list) :
+        index = -7
+        for i, tournament in enumerate(tournaments_list):
             if tournament.get("name") == self["name"]:
                 index = i
         if index != -1:
-            tournaments_list[index]=self
+            tournaments_list[index] = self
         json_tournament.datas_json = tournaments_list
         JsonFile.create_json(json_tournament)
 
@@ -60,6 +61,7 @@ class Tournament:
                 return True
         return False
 
+    @staticmethod
     def current_tournament():
         """recherche et renvoi le tournoi en cours"""
         json_tournament = JsonFile("tournaments.json", [])
@@ -67,6 +69,5 @@ class Tournament:
         for tournament in tournaments:
             if (tournament.get("start_date") != "01/01/2000"
                     and tournament.get("start_date") != "01/01/2000"):
-                current_tournament = tournament.get("name")
+                current_tournament = tournament
                 return current_tournament
-
