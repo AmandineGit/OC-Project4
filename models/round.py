@@ -26,7 +26,7 @@ class Round:
         """Recherche et renvoi le numéro du dernier round d'un tournoi"""
         json_rounds = JsonFile("rounds.json", [])
         rounds = JsonFile.read_json(json_rounds)
-        return (rounds[-1]["name"])
+        return rounds[-1]["name"]
 
     def record_round(self, start_date):
         """création d'un round  """
@@ -35,7 +35,6 @@ class Round:
         json_round = JsonFile("rounds.json", json_file)
         JsonFile.append_json(json_round)
         return round
-
 
     def search_round(self):
         """Test d'existance d'un d"""
@@ -46,3 +45,17 @@ class Round:
             if round.get("name") == self:
                 return True
         return False
+
+    def update_round(self):
+        """Mise à jour du round dans le json, à utiliser
+        avec un object round complet pour avoir toutes les données du round"""
+        json_round = JsonFile("rounds.json", [])
+        rounds_list = JsonFile.read_json(json_round)
+        index = -7
+        for i, round in enumerate(rounds_list):
+            if round.get("name") == self["name"]:
+                index = i
+        if index != -1:
+            rounds_list[index] = self
+        json_round.datas_json = rounds_list
+        JsonFile.create_json(json_round)

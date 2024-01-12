@@ -40,7 +40,8 @@ class Tournament:
             return tournament_exist
 
     def update_tournament(self):
-        """Mise à jour du tournoi en cours dans le json"""
+        """Mise à jour du tournoi en cours dans le json, à utiliser
+        après current_tournament pour avoir toutes les données du tournoi"""
         json_tournament = JsonFile("tournaments.json", [])
         tournaments_list = JsonFile.read_json(json_tournament)
         index = -7

@@ -1,4 +1,6 @@
 """ Define main controllers."""
+import random
+
 from models.tournament import Tournament
 from models.round import Round
 from models.player import Player
@@ -6,7 +8,6 @@ from views.menu import View
 from models.file_json import JsonFile
 from datetime import datetime
 import os
-
 
 
 class Controllers:
@@ -63,7 +64,7 @@ class Controllers:
                             Tournament.update_tournament(tournament)
                             View.display_open_tournament(tournament_name, open_date)
                             Controllers.create_players()
-                else :
+                else:
                     View.display_error_tournament(tournament_name)
         Controllers.main_menu()
 
@@ -87,7 +88,7 @@ class Controllers:
             datas_player = first_name, last_name, date_of_birth
             player_exist = Player.search_player(datas_player)
             if player_exist is True:
-                 Controllers.registrer_player_tournament(datas)
+                Controllers.registrer_player_tournament(datas)
             else:
                 player = Player(first_name, last_name, date_of_birth)
                 dataswip = datas
@@ -117,17 +118,18 @@ class Controllers:
     def lauch_round():
         """Lancer un round"""
         lauch = View.prompt_lauch_round()
-        if lauch != "n" and lauch != "y":
+        while lauch != "n" and lauch != "y":
             View.display_error_choise()
-        elif lauch == "n":
+            lauch = View.prompt_lauch_round()
+        if lauch == "n":
             Controllers.main_menu()
         elif lauch == "y":
             current_date = datetime.now()
             current_date = current_date.strftime('%w/%m/%Y %H:%M')
-            last_round = Round.last_number_of_round()
             if os.path.exists("rounds.json"):
                 """génération du nom du round"""
-                last_number = last_round[-2:]
+                last_round = Round.last_number_of_round()
+                last_number = last_round[-1:]
                 last_number = int(last_number)
                 current_number = last_number + 1
                 str(current_number)
@@ -140,9 +142,21 @@ class Controllers:
             last_round_in_tournament = Tournament.last_number_of_round(current_tournament.get("name"))
             current_tournament["rounds_list"].append(round.name)
             Tournament.update_tournament(current_tournament)
-            if last_round_in_tournament == 0:
-                """lancer l'initialisation"""
-                return
-            else:
-                """créer un nouveau round"""
-                return
+            round.matchs_list = Controllers.initialize_round(current_tournament, last_round_in_tournament)
+            round = round.__dict__
+            Round.update_round(round)
+            Controllers.main_menu()
+
+    @staticmethod
+    def initialize_round(self, last_round_in_tournament):
+        """ Initialisation du round"""
+        if last_round_in_tournament == 0:
+            """lancer la premièrer initialisation, mélange aléatoire des joueurs"""
+            registred_players_list = self["registred_players_list"]
+            random.shuffle(registred_players_list)
+            return registred_players_list
+        else:
+            """créer un nouveau round"""
+            registred_players_list = current_tournament["registred_players_list"]
+            random.shuffle(registred_players_list)
+            return registred_players_list
