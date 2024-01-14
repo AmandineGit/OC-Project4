@@ -70,8 +70,9 @@ class View:
         return lauch
 
     @staticmethod
-    def prompt_finish_roud():
-        print("test3")
+    def prompt_close_roud():
+        lauch = input("Voulez-vous cloturer le round en cours ? y/n ")
+        return lauch
 
     def display_register_player(self, last_name, tournament_name):
         """Affiche un message confirmant l'inscription du player"""
@@ -102,6 +103,11 @@ class View:
     def display_error_tournamentinprogress():
         """Affiche un message indiquant qu'un tournoi est deja en cours"""
         print("Un tournoi est déjà en cours, vous ne pouvez pas en ouvrir un second.\n")
+
+    @staticmethod
+    def display_error_roundinprogress():
+        """Affiche un message indiquant qu'un round est deja en cours"""
+        print("Un round est déjà en cours, vous ne pouvez pas en ouvrir un second.\n")
 
     @staticmethod
     def display_error_choise():

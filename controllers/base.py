@@ -14,23 +14,25 @@ class Controllers:
     """Classe principale """
     @staticmethod
     def main_menu():
-        """Gestion des sous menu"""
-        View.display_main_menu()
-        choice = View.prompt_main_menu()
-        while choice != 1 and choice != 2 and choice != 3 and choice != 5 and choice != 6:
-            View.display_error_menu()
+        """Gestion des sous menu avec une boucle infinie"""
+        while True:
+            View.display_main_menu()
+            available_choices = (0, 1, 2, 3, 4, 5, 6)
             choice = View.prompt_main_menu()
             choice = int(choice)
-        if choice == 1:
-            Controllers.create_tournament()
-        elif choice == 2:
-            Controllers.open_tournament()
-        elif choice == 3:
-            Controllers.create_players()
-        elif choice == 5:
-            Controllers.lauch_round()
-        elif choice == 6:
-            View.prompt_finish_roud()
+            if choice not in available_choices:
+                View.display_error_menu()
+                View.prompt_main_menu()
+            if choice == 1:
+                Controllers.create_tournament()
+            elif choice == 2:
+                Controllers.open_tournament()
+            elif choice == 3:
+                Controllers.create_players()
+            elif choice == 5:
+                Controllers.lauch_round()
+            elif choice == 6:
+                View.prompt_finish_roud()
 
     @staticmethod
     def create_tournament():
@@ -122,12 +124,15 @@ class Controllers:
             View.display_error_choise()
             lauch = View.prompt_lauch_round()
         if lauch == "n":
-            Controllers.main_menu()
+            return
         elif lauch == "y":
             current_date = datetime.now()
             current_date = current_date.strftime('%w/%m/%Y %H:%M')
             if os.path.exists("rounds.json"):
                 """génération du nom du round"""
+                while Round.open_round_exist() is True:
+                    View.display_error_roundinprogress()
+                    return
                 last_round = Round.last_number_of_round()
                 last_number = last_round[-1:]
                 last_number = int(last_number)
@@ -145,7 +150,7 @@ class Controllers:
             round.matchs_list = Controllers.initialize_round(current_tournament, last_round_in_tournament)
             round = round.__dict__
             Round.update_round(round)
-            Controllers.main_menu()
+            return
 
     @staticmethod
     def initialize_round(self, last_round_in_tournament):

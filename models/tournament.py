@@ -69,7 +69,7 @@ class Tournament:
         tournaments = JsonFile.read_json(json_tournament)
         for tournament in tournaments:
             if (tournament.get("start_date") != "01/01/2000"
-                    and tournament.get("start_date") != "01/01/2000"):
+                    and tournament.get("end_date") == "01/01/2000"):
                 current_tournament = tournament
                 return current_tournament
 
