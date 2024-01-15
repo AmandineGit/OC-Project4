@@ -35,8 +35,8 @@ class Tournament:
             json_file = tournament.__dict__
             json_tournament = JsonFile("tournaments.json", json_file)
             JsonFile.append_json(json_tournament)
-            print("\n==> Le fichier " + "tournaments.json"  + " a été mis à jour."
-                                                              "\n Le tournoi " + self.name + " a été enregistré")
+            print("\n==> Le fichier " + "tournaments.json" +
+                  " a été mis à jour.\n Le tournoi " + self.name + " a été enregistré")
             return tournament_exist
         else:
             return tournament_exist

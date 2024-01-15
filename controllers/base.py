@@ -70,7 +70,6 @@ class Controllers:
                     View.display_error_tournament(tournament_name)
         Controllers.main_menu()
 
-
     @staticmethod
     def player_registration():
         """Création et enregistrement sur un tournoi de users"""
@@ -241,6 +240,7 @@ class Controllers:
                     View.display_close_round(current_round["name"])
                     return
 
+    @staticmethod
     def score_match():
         current_round = Round.open_round_exist()
         matchs_list = current_round[1]["matchs_list"]
@@ -275,7 +275,7 @@ class Controllers:
                     player_win2 = Player.search_player_by_id(player_win2)
                     View.display_equality_player(player_win, player_win2)
                     break
-            match_score = ([match[0],score_player1],[match[1], score_player2])
+            match_score = ([match[0], score_player1], [match[1], score_player2])
             completed_matchs_tuple.append(match_score)
             matchs_list = matchs_list[1:]
         return completed_matchs_tuple

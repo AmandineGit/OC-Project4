@@ -2,6 +2,7 @@
 from models.tournament import Tournament
 from datetime import datetime
 
+
 class View:
     """Vue du menu principal"""
 
@@ -55,8 +56,8 @@ class View:
         print("\nEnregistrement des joueurs")
         first_name = input("\nVeuillez indiquer le prénom du joueur : ")
         last_name = input("Veuillez indiquer le nom du joueur : ")
-        date_of_birth = View.test_date(input("Veuillez indiquer la date de naissance du "
-                                                            "joueur sous le format jj/mm/yy : "))
+        date_of_birth = View.test_date(input
+                                       ("Veuillez indiquer la date de naissance du joueur sous le format jj/mm/yy : "))
         return first_name, last_name, date_of_birth
 
     @staticmethod
@@ -80,7 +81,8 @@ class View:
             print("Entrer le résultat du match pour chaque joueur :\n")
             return
         elif self == 2:
-            print("* Match opposant " + name_player1[0] + " " + name_player1[1] + " et " + name_player2[0] + " " + name_player2[1])
+            print("* Match opposant " + name_player1[0] + " " + name_player1[1] + " et "
+                  + name_player2[0] + " " + name_player2[1])
             score = input("Score réalisé par " + name_player1[0] + " " + name_player1[1] + " : ")
             return score
 
@@ -148,7 +150,7 @@ class View:
         print(self[0] + " " + self[1] + " a gagné le match.\n")
 
     def display_equality_player(self, player_win2):
-        print(self[0] + " " + self[1] +" " + player_win2[0] + " " + player_win2[1] +" ont fait match nul.\n")
+        print(self[0] + " " + self[1] + " " + player_win2[0] + " " + player_win2[1] + " ont fait match nul.\n")
 
     @staticmethod
     def display_error_score():
@@ -166,5 +168,3 @@ class View:
                 print("Format de date incorrect. Veuillez réessayer.")
                 date_str = input("Veuillez indiquer une date sous le format jj/mm/yy : ")
         return date_str
-
-
