@@ -22,8 +22,8 @@ class Controllers:
             choice = int(choice)
             if choice not in available_choices:
                 View.display_error_menu()
-                View.prompt_main_menu()
-            if choice == 1:
+                continue
+            elif choice == 1:
                 Controllers.create_tournament()
             elif choice == 2:
                 Controllers.open_tournament()
@@ -70,34 +70,42 @@ class Controllers:
                     View.display_error_tournament(tournament_name)
         Controllers.main_menu()
 
+
     @staticmethod
     def create_players():
         """Création et enregistrement sur un tournoi de users"""
-        tournament_exist = False
-        while tournament_exist is False:
-            lauch = View.prompt_create_players()
-            if lauch != "n" and lauch != "y":
+        while True:
+            """gestion du sous menu"""
+            available_choices = ("n", "y")
+            choice = View.prompt_create_players()
+            if choice not in available_choices:
                 View.display_error_choise()
-            elif lauch == "n":
+                continue
+            elif choice == "n":
                 Controllers.main_menu()
-            elif lauch == "y":
+            elif choice == "y":
                 datas = View.prompt_datas_player()
                 first_name, last_name, date_of_birth, tournament_name = datas
                 tournament_exist = Tournament.search_tournament(tournament_name)
                 if tournament_exist is False:
+                    """si le tournoi saisie n'existe pas, le user est invité à saisir à nouveau"""
                     View.display_error_tournament(tournament_name)
-        while datas is not None:
-            datas_player = first_name, last_name, date_of_birth
-            player_exist = Player.search_player(datas_player)
-            if player_exist is True:
-                Controllers.registrer_player_tournament(datas)
-            else:
-                player = Player(first_name, last_name, date_of_birth)
-                dataswip = datas
-                Player.record_player(player, "players.json")
-                Controllers.registrer_player_tournament(dataswip)
-            datas = View.prompt_create_players()
-        Controllers.main_menu()
+                    continue
+                else:
+                    datas_player = first_name, last_name, date_of_birth
+                    player_exist = Player.search_player(datas_player)
+                    if player_exist is True:
+                        Controllers.registrer_player_tournament(datas)
+                    else:
+                        """Si le player n'est pas encore connu, 
+                        alors il est également enregistré dans le fichier players.json"""
+                        player = Player(first_name, last_name, date_of_birth)
+                        dataswip = datas
+                        Player.record_player(player, "players.json")
+                        View.display_create_player(first_name, last_name)
+                        Controllers.registrer_player_tournament(dataswip)
+                        break
+            continue
 
     def registrer_player_tournament(self):
         """Ajouter un player dans un tournoi
@@ -128,29 +136,36 @@ class Controllers:
         elif lauch == "y":
             current_date = datetime.now()
             current_date = current_date.strftime('%w/%m/%Y %H:%M')
-            if os.path.exists("rounds.json"):
-                """génération du nom du round"""
-                while Round.open_round_exist() is True:
-                    View.display_error_roundinprogress()
-                    return
-                last_round = Round.last_number_of_round()
-                last_number = last_round[-1:]
-                last_number = int(last_number)
-                current_number = last_number + 1
-                str(current_number)
-                current_number = str(current_number)
-                round_name = "Round" + current_number
-            else:
-                round_name = "Round1"
-            round = Round.record_round(round_name, current_date)
+            round_name = Controllers.name_of_round()
+
             current_tournament = (Tournament.current_tournament())
             last_round_in_tournament = Tournament.last_number_of_round(current_tournament.get("name"))
-            current_tournament["rounds_list"].append(round.name)
+            current_tournament["rounds_list"].append(round_name)
             Tournament.update_tournament(current_tournament)
-            round.matchs_list = Controllers.initialize_round(current_tournament, last_round_in_tournament)
-            round = round.__dict__
-            Round.update_round(round)
+
+            matchs_list = Controllers.initialize_round(current_tournament, last_round_in_tournament)
+            Round.record_round(round_name, current_date, matchs_list)
+            View.display_lauch_round(round_name)
             return
+
+    @staticmethod
+    def name_of_round():
+        """définie le nom d'un round"""
+        if os.path.exists("rounds.json"):
+            """génération du nom du round"""
+            while Round.open_round_exist() is True:
+                View.display_error_roundinprogress()
+                Controllers.main_menu()
+            last_round = Round.last_number_of_round()
+            last_number = last_round[-1:]
+            last_number = int(last_number)
+            current_number = last_number + 1
+            str(current_number)
+            current_number = str(current_number)
+            name_round = "Round" + current_number
+            return name_round
+        else:
+            return "Round1"
 
     @staticmethod
     def initialize_round(self, last_round_in_tournament):

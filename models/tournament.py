@@ -28,13 +28,15 @@ class Tournament:
         return self.name
 
     def record_tournament(self, location):
-        """création d'un tournoiec test d'existance préalable """
+        """création d'un tournoi et  test d'existance préalable """
         tournament_exist = Tournament.search_tournament(self)
         if tournament_exist is False:
             tournament = Tournament(self, location)
             json_file = tournament.__dict__
             json_tournament = JsonFile("tournaments.json", json_file)
             JsonFile.append_json(json_tournament)
+            print("\n==> Le fichier " + "tournaments.json"  + " a été mis à jour."
+                                                              "\n Le tournoi " + self.name + " a été enregistré")
             return tournament_exist
         else:
             return tournament_exist
@@ -52,6 +54,7 @@ class Tournament:
             tournaments_list[index] = self
         json_tournament.datas_json = tournaments_list
         JsonFile.create_json(json_tournament)
+        print("\n==> Le fichier " + "tournaments.json" + " a été mis à jour")
 
     def search_tournament(self):
         """Test d'existance d'un tournoi"""

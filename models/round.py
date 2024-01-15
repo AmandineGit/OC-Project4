@@ -21,27 +21,30 @@ class Round:
         """ représentation de l objet de type Round """
         return self.name
 
-    def record_round(self, start_date):
+    def record_round(self, start_date, matchs_list):
         """création d'un round  """
-        round = Round(self, start_date)
+        round = Round(self, start_date, matchs_list)
         json_file = round.__dict__
         json_round = JsonFile("rounds.json", json_file)
         JsonFile.append_json(json_round)
+        print("\n==> Le fichier " + "rounds.json" + " a été mis à jour")
         return round
 
-    def update_round(self):
-        """Mise à jour du round dans le json, à utiliser
-        avec un object round complet pour avoir toutes les données du round"""
+    """def update_round(self):
+        ""non utilise : 
+        Mise à jour du round dans le json, à utiliser
+        avec un object round complet pour avoir toutes les données du round""
+        round = self.__dict__
         json_round = JsonFile("rounds.json", [])
         rounds_list = JsonFile.read_json(json_round)
         index = -7
         for i, round in enumerate(rounds_list):
-            if round.get("name") == self["name"]:
+            if round.get("name") == round["name"]:
                 index = i
         if index != -1:
-            rounds_list[index] = self
+            rounds_list[index] = round
         json_round.datas_json = rounds_list
-        JsonFile.create_json(json_round)
+        JsonFile.create_json(json_round)"""
 
     def search_round(self):
         """Test d'existance d'un d"""

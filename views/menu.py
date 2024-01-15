@@ -76,11 +76,11 @@ class View:
 
     def display_register_player(self, last_name, tournament_name):
         """Affiche un message confirmant l'inscription du player"""
-        print("\n===> Le joueur " + self + " " + last_name + " est inscrit au tournoi " + tournament_name+ ".")
+        print("===> Le joueur " + self + " " + last_name + " est inscrit au tournoi " + tournament_name+ ".\n")
 
     def display_create_player(self, last_name):
         """Affiche un message confirmant l'inscription du player"""
-        print("\n===> Le joueur " + self + " " + last_name + " est enregistré dans la base de joueurs.")
+        print("===> Le joueur " + self + " " + last_name + " est enregistré dans la base de joueurs.\n")
 
     def display_error_tournament(self):
         """Affiche un message indiquant que le tournoi n'existe pas"""
@@ -113,6 +113,11 @@ class View:
     def display_error_choise():
         """Affiche un message indiquant une erreur sur le choix"""
         print("\nMerci de répondre par y pour yes ou n pour no")
+
+    @staticmethod
+    def display_lauch_round(self):
+        print("==> Le round " + self + " est lancé.\n")
+
 
     def test_date(self):
         """Valide la saisie d'une date"""
