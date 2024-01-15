@@ -57,8 +57,12 @@ class View:
         last_name = input("Veuillez indiquer le nom du joueur : ")
         date_of_birth = View.test_date(input("Veuillez indiquer la date de naissance du "
                                                             "joueur sous le format jj/mm/yy : "))
-        tournament_name = input("Veuillez indiquer le nom du tournoi : ")
-        return first_name, last_name, date_of_birth, tournament_name
+        return first_name, last_name, date_of_birth
+
+    @staticmethod
+    def prompt_choice_tournament():
+        tournament_name = input("\nVeuillez indiquer le nom du tournoi : ")
+        return tournament_name
 
     @staticmethod
     def prompt_lauch_round():
@@ -71,9 +75,9 @@ class View:
         return lauch
 
 
-    def display_register_player(self, last_name, tournament_name):
+    def display_register_player(self):
         """Affiche un message confirmant l'inscription du player"""
-        print("===> Le joueur " + self + " " + last_name + " est inscrit au tournoi " + tournament_name+ ".\n")
+        print("===> Le joueur est inscrit au tournoi " + self + ".\n")
 
     def display_create_tournament(self):
         """Affiche un message confirmant la création du tournoi"""
@@ -81,7 +85,7 @@ class View:
 
     def display_create_player(self, last_name):
         """Affiche un message confirmant l'inscription du player"""
-        print("===> Le joueur " + self + " " + last_name + " est enregistré dans la base de joueurs.\n")
+        print("===> Le joueur " + self + " " + last_name + " est enregistré dans la base de joueurs.")
 
     def display_error_tournament(self):
         """Affiche un message indiquant que le tournoi n'existe pas"""
@@ -119,6 +123,11 @@ class View:
     def display_error_choise():
         """Affiche un message indiquant une erreur sur le choix"""
         print("\nMerci de répondre par y pour yes ou n pour no")
+
+    @staticmethod
+    def display_error_player_already_registrer():
+        """Affiche un message indiquant une erreur sur le choix"""
+        print("\nLe joueur est déjà inscrit sur ce tournoi.")
 
     @staticmethod
     def display_lauch_round(self):

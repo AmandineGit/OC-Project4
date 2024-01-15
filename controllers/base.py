@@ -28,7 +28,7 @@ class Controllers:
             elif choice == 2:
                 Controllers.open_tournament()
             elif choice == 3:
-                Controllers.create_players()
+                Controllers.player_registration()
             elif choice == 5:
                 Controllers.lauch_round()
             elif choice == 6:
@@ -72,7 +72,7 @@ class Controllers:
 
 
     @staticmethod
-    def create_players():
+    def player_registration():
         """Création et enregistrement sur un tournoi de users"""
         while True:
             """gestion du sous menu"""
@@ -85,44 +85,58 @@ class Controllers:
                 Controllers.main_menu()
             elif choice == "y":
                 datas = View.prompt_datas_player()
-                first_name, last_name, date_of_birth, tournament_name = datas
-                tournament_exist = Tournament.search_tournament(tournament_name)
-                if tournament_exist is False:
-                    """si le tournoi saisie n'existe pas, le user est invité à saisir à nouveau"""
-                    View.display_error_tournament(tournament_name)
-                    continue
+                datas_player = datas
+                player_id_exist = Player.search_player(datas_player)
+                if player_id_exist is not False:
+                    """si le player existe déjà il est inscrit directement au tournoi"""
+                    Controllers.registrer_player_tournament(player_id_exist)
                 else:
-                    datas_player = first_name, last_name, date_of_birth
-                    player_exist = Player.search_player(datas_player)
-                    if player_exist is True:
-                        Controllers.registrer_player_tournament(datas)
-                    else:
-                        """Si le player n'est pas encore connu, 
-                        alors il est également enregistré dans le fichier players.json"""
-                        player = Player(first_name, last_name, date_of_birth)
-                        dataswip = datas
-                        Player.record_player(player, "players.json")
-                        View.display_create_player(first_name, last_name)
-                        Controllers.registrer_player_tournament(dataswip)
-                        break
+                    """si le player n'existe pas il est crée dans players.json puis inscrit au tournoi"""
+                    national_chess_id = Controllers.create_player(datas_player)
+                    View.display_create_player(datas_player[0], datas_player[1])
+                    Controllers.registrer_player_tournament(national_chess_id)
+                    break
             continue
+
+    def create_player(self):
+        """Si le player n'est pas encore connu,
+        alors il est également enregistré dans le fichier players.json"""
+        national_chess_id = Player.create_national_chess_id()
+        first_name, last_name, date_of_birth = self
+        player = Player(first_name, last_name, date_of_birth, national_chess_id)
+        Player.record_player(player, "players.json")
+        return national_chess_id
 
     def registrer_player_tournament(self):
         """Ajouter un player dans un tournoi
         Rechercher le tournoi en cours
         Ajouter le player dans la liste de players du tournoi grace à la methode update_tournament"""
+        while True:
+            tournament_name = View.prompt_choice_tournament()
+            tournament_exist = Tournament.search_tournament(tournament_name)
+            if tournament_exist is False:
+                """si le tournoi saisie n'existe pas, le user est invité à saisir à nouveau"""
+                View.display_error_tournament(tournament_name)
+                continue
+            elif tournament_exist is True:
+                break
         json_tournament = JsonFile("tournaments.json", [])
         tournaments = JsonFile.read_json(json_tournament)
         for tournament in tournaments:
-            if tournament.get("name") == self[3]:
+            if tournament.get("name") == tournament_name:
                 players_list = tournament["registred_players_list"]
-                players_list.append([self[0], self[1]])
-                tournament["registred_players_list"] = players_list
-                for tournamentnew in tournaments:
-                    if tournamentnew.get("name") == tournament["name"]:
-                        tournamentnew["registred_players_list"] = tournament["registred_players_list"]
-                        Tournament.update_tournament(tournamentnew)
-                View.display_register_player(self[0], self[1], self[3])
+                if self not in players_list:
+                    players_list.append(self)
+                    tournament["registred_players_list"] = players_list
+                    for tournamentnew in tournaments:
+                        if tournamentnew.get("name") == tournament["name"]:
+                            tournamentnew["registred_players_list"] = tournament["registred_players_list"]
+                            Tournament.update_tournament(tournamentnew)
+                    View.display_register_player(tournament_name)
+                    return
+                else:
+                    View.display_error_player_already_registrer()
+                    return
 
     @staticmethod
     def lauch_round():
