@@ -81,4 +81,4 @@ class Round:
         json_round.datas_json = rounds_list
         JsonFile.create_json(json_round)
         print("\n==> Le fichier " + "rounds.json" + " a été mis à jour")
-        print("le tournoi est cloturé")
+

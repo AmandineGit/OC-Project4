@@ -238,6 +238,7 @@ class Controllers:
                     current_round["end_date"] = current_date
                     current_round["matchs_list"] = completed_matchs_tuple
                     Round.update_round(current_round)
+                    View.display_close_round(current_round["name"])
                     return
 
     def score_match():
@@ -250,21 +251,21 @@ class Controllers:
                 name_player1 = Player.search_player_by_id(match[0])
                 name_player2 = Player.search_player_by_id(match[1])
                 score_player1 = View.prompt_score_matchs(2, name_player1, name_player2)
-                score_player1 = int(score_player1)
-                if score_player1 >= 2:
-                    print("Score incorrect.")
+                possible_score = ["0", "1"]
+                if score_player1 not in possible_score:
+                    View.display_error_score()
                     continue
-                elif score_player1 == 1:
+                elif score_player1 == "1":
                     score_player2 = 0
                     player_win = match[0]
                     player_win = Player.search_player_by_id(player_win)
                     break
-                elif score_player1 == 0:
+                elif score_player1 == "0":
                     score_player2 = 1
                     player_win = match[1]
                     player_win = Player.search_player_by_id(player_win)
                     break
-            print(player_win[0] + " " + player_win[1] + " a gagné le match.")
+            View.display_win_player(player_win)
             match_score = ([match[0],score_player1],[match[1], score_player2])
             completed_matchs_tuple.append(match_score)
             matchs_list = matchs_list[1:]

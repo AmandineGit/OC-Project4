@@ -74,6 +74,15 @@ class View:
         lauch = input("Voulez-vous cloturer le round en cours ? y/n ")
         return lauch
 
+    @staticmethod
+    def prompt_score_matchs(self, name_player1=None, name_player2=None):
+        if self == 1:
+            print("Entrer le résultat du match pour chaque joueur :\n")
+            return
+        elif self == 2:
+            print("* Match opposant " + name_player1[0] + " " + name_player1[1] + " et " + name_player2[0] + " " + name_player2[1])
+            score = input("Score réalisé par " + name_player1[0] + " " + name_player1[1] + " : ")
+            return score
 
     def display_register_player(self):
         """Affiche un message confirmant l'inscription du player"""
@@ -129,9 +138,18 @@ class View:
         """Affiche un message indiquant une erreur sur le choix"""
         print("\nLe joueur est déjà inscrit sur ce tournoi.")
 
-    @staticmethod
     def display_lauch_round(self):
         print("==> Le round " + self + " est lancé.\n")
+
+    def display_close_round(self):
+        print("==> Le round " + self + " est cloturé.\n")
+
+    def display_win_player(self):
+        print(self[0] + " " + self[1] + " a gagné le match.\n")
+
+    @staticmethod
+    def display_error_score():
+        print("Score incorrect.")
 
     def test_date(self):
         """Valide la saisie d'une date"""
@@ -147,12 +165,3 @@ class View:
         return date_str
 
 
-    @staticmethod
-    def prompt_score_matchs(self, name_player1=None, name_player2=None):
-        if self == 1:
-            print("Entrer le résultat du match pour chaque joueur :\n")
-            return
-        elif self == 2:
-            print("\n* Match opposant " + name_player1[0] + " " + name_player1[1] + " et " + name_player2[0] + " " + name_player2[1])
-            score = input("Score réalisé par " + name_player1[0] + " " + name_player1[1] + " : ")
-            return score
