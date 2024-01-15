@@ -30,6 +30,42 @@ class Round:
         print("\n==> Le fichier " + "rounds.json" + " a été mis à jour")
         return round
 
+    @staticmethod
+    def open_round_exist():
+        """recherche et renvoi un booleen et le nom round en cours ou un str vide"""
+        json_round = JsonFile("rounds.json", [])
+        rounds = JsonFile.read_json(json_round)
+        open_round_exist = False
+        for round in rounds:
+            if (round.get("start_date") != "01/01/2000 12:00"
+                    and round.get("end_date") == "01/01/2000 12:00"):
+                open_round_exist = True
+                name_round_exist = round.get("name")
+            else:
+                open_round_exist = False
+                name_round_exist = ""
+        return [open_round_exist, name_round_exist]
+
+    @staticmethod
+    def last_number_of_round():
+        """Recherche et renvoi le numéro du dernier round d'un tournoi"""
+        json_rounds = JsonFile("rounds.json", [])
+        rounds = JsonFile.read_json(json_rounds)
+        return rounds[-1]["name"]
+
+    @staticmethod
+    def prompt_close_round():
+        lauch = input("Voulez-vous cloturer le round en cours ? y/n ")
+        return lauch
+
+    def search_matchslist_round(self):
+        """Renvoi la list des matchs d'un round """
+        json_rounds = JsonFile("rounds.json", [])
+        rounds = JsonFile.read_json(json_rounds)
+        for round in rounds:
+            if round.get("name") == self:
+                return round.get("matchs_list")
+
     """def update_round(self):
         ""non utilise : 
         Mise à jour du round dans le json, à utiliser
@@ -46,31 +82,12 @@ class Round:
         json_round.datas_json = rounds_list
         JsonFile.create_json(json_round)"""
 
-    def search_round(self):
-        """Test d'existance d'un d"""
+    """def search_round(self):
+        "" Non utilisé Test d'existance d'un round""
         json_rounds = JsonFile("rounds.json", [])
         rounds = JsonFile.read_json(json_rounds)
         print(rouds)
         for round in rounds:
             if round.get("name") == self:
                 return True
-        return False
-
-    @staticmethod
-    def open_round_exist():
-        """recherche et renvoi le tournoi en cours"""
-        json_round = JsonFile("rounds.json", [])
-        rounds = JsonFile.read_json(json_round)
-        open_round_exist = False
-        for round in rounds:
-            if (round.get("start_date") != "01/01/2000 12:00"
-                    and round.get("end_date") == "01/01/2000 12:00"):
-                open_round_exist = True
-        return open_round_exist
-
-    @staticmethod
-    def last_number_of_round():
-        """Recherche et renvoi le numéro du dernier round d'un tournoi"""
-        json_rounds = JsonFile("rounds.json", [])
-        rounds = JsonFile.read_json(json_rounds)
-        return rounds[-1]["name"]
+        return False"""

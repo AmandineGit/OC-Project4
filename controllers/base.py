@@ -32,7 +32,7 @@ class Controllers:
             elif choice == 5:
                 Controllers.lauch_round()
             elif choice == 6:
-                View.prompt_finish_roud()
+                Controllers.close_round()
 
     @staticmethod
     def create_tournament():
@@ -136,6 +136,10 @@ class Controllers:
         elif lauch == "y":
             current_date = datetime.now()
             current_date = current_date.strftime('%w/%m/%Y %H:%M')
+            round_exist = Round.open_round_exist()
+            while round_exist[0] is True:
+                View.display_error_roundinprogress()
+                Controllers.main_menu()
             round_name = Controllers.name_of_round()
 
             current_tournament = (Tournament.current_tournament())
@@ -152,10 +156,6 @@ class Controllers:
     def name_of_round():
         """définie le nom d'un round"""
         if os.path.exists("rounds.json"):
-            """génération du nom du round"""
-            while Round.open_round_exist() is True:
-                View.display_error_roundinprogress()
-                Controllers.main_menu()
             last_round = Round.last_number_of_round()
             last_number = last_round[-1:]
             last_number = int(last_number)
@@ -180,3 +180,27 @@ class Controllers:
             registred_players_list = current_tournament["registred_players_list"]
             random.shuffle(registred_players_list)
             return registred_players_list
+
+    @staticmethod
+    def close_round():
+        while True:
+            available_choices = ["y", "n"]
+            choice = View.prompt_close_round()
+            if choice not in available_choices:
+                View.display_error_choise()
+                continue
+            elif choice == "n":
+                Controllers.main_menu()
+            elif choice == "y":
+                round_open = Round.open_round_exist()
+                if round_open[0] is False:
+                    View.display_error_roundnotinprogress()
+                    continue
+                else:
+                    completed_matchs_tuple = Controllers.score_match(round_open[1])
+                    pass
+
+    def score_match(self):
+        matchs_list = Round.search_matchslist_round(self)
+        completed_matchs_tuple = View.prompt_score_matchs(matchs_list)
+        print(completed_matchs_tuple)

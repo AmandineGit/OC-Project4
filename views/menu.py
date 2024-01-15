@@ -32,10 +32,6 @@ class View:
         tournament_name = input("Veuillez indiquer le nom du tournoi : ")
         return tournament_name, tournament_location
 
-    def display_create_tournament(self):
-        """Affiche un message confirmant la création du tournoi"""
-        print("\n===> Le tournoi '" + self + "' est enregistré")
-
     @staticmethod
     def prompt_open_tournament():
         """Prompt pour selectionner le tournoi et receuillir la date de début d'ouverture """
@@ -70,13 +66,18 @@ class View:
         return lauch
 
     @staticmethod
-    def prompt_close_roud():
+    def prompt_close_round():
         lauch = input("Voulez-vous cloturer le round en cours ? y/n ")
         return lauch
+
 
     def display_register_player(self, last_name, tournament_name):
         """Affiche un message confirmant l'inscription du player"""
         print("===> Le joueur " + self + " " + last_name + " est inscrit au tournoi " + tournament_name+ ".\n")
+
+    def display_create_tournament(self):
+        """Affiche un message confirmant la création du tournoi"""
+        print("\n===> Le tournoi '" + self + "' est enregistré")
 
     def display_create_player(self, last_name):
         """Affiche un message confirmant l'inscription du player"""
@@ -110,6 +111,11 @@ class View:
         print("Un round est déjà en cours, vous ne pouvez pas en ouvrir un second.\n")
 
     @staticmethod
+    def display_error_roundnotinprogress():
+        """Affiche un message indiquant qu'il n'y a aucun round en cours"""
+        print("Aucun round en cours, vous ne pouvez pas cloturer de round.\n")
+
+    @staticmethod
     def display_error_choise():
         """Affiche un message indiquant une erreur sur le choix"""
         print("\nMerci de répondre par y pour yes ou n pour no")
@@ -117,7 +123,6 @@ class View:
     @staticmethod
     def display_lauch_round(self):
         print("==> Le round " + self + " est lancé.\n")
-
 
     def test_date(self):
         """Valide la saisie d'une date"""
@@ -131,3 +136,31 @@ class View:
                 print("Format de date incorrect. Veuillez réessayer.")
                 date_str = input("Veuillez indiquer une date sous le format jj/mm/yy : ")
         return date_str
+
+
+    @staticmethod
+    def prompt_score_matchs(matchs_list):
+        completed_matchs_tuple = []
+        print("Entrer le résultat du match pour chaque joueur :\n")
+        for match in matchs_list:
+            print(matchs_list)
+            while True:
+                print(match[0])
+                print(match[1])
+                score_player1 = input(match[0] + " : ")
+                score_player1 = int(score_player1)
+                if score_player1 > 2:
+                    print("Score incorrect.")
+                    continue
+                elif score_player1 == 1:
+                    score_player2 = 0
+                    player_win = match[0]
+                elif score_player1 == 0:
+                    score_player2 = 1
+                    player_win = match[1]
+                print(player_win + " a gagné le match.")
+                match_score = ([match[0],score_player1],[match[1], score_player2])
+                completed_matchs_tuple.append(match_score)
+                break
+
+        return completed_matchs_tuple
