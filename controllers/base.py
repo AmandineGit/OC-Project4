@@ -139,7 +139,7 @@ class Controllers:
                     return
 
     @staticmethod
-    def lauch_round():
+    def old_lauch_round():
         """Lancer un round"""
         lauch = View.prompt_lauch_round()
         while lauch != "n" and lauch != "y":
@@ -167,6 +167,37 @@ class Controllers:
             return
 
     @staticmethod
+    def lauch_round():
+        """Lancer un round"""
+        while True:
+            choice_available = ["y", "n"]
+            choice = View.prompt_lauch_round()
+            if choice not in choice_available:
+                View.display_error_choise()
+                continue
+            elif choice == "n":
+                Controllers.main_menu()
+            elif choice == "y":
+                current_date = datetime.now()
+                current_date = current_date.strftime('%w/%m/%Y %H:%M')
+                round_exist = Round.open_round_exist()
+                while round_exist[0] is True:
+                    View.display_error_roundinprogress()
+                    Controllers.main_menu()
+                round_name = Controllers.name_of_round()
+                current_tournament = (Tournament.current_tournament())
+                last_round_in_tournament = Tournament.last_number_of_round(current_tournament.get("name"))
+                current_tournament["rounds_list"].append(round_name)
+                round_number = round_name[5:]
+                round_number = int(round_number)
+                current_tournament["current_round_number"] = round_number
+                Tournament.update_tournament(current_tournament)
+                matchs_list = Controllers.initialize_round(current_tournament, last_round_in_tournament)
+                Round.record_round(round_name, current_date, matchs_list)
+                View.display_lauch_round(round_name)
+                return
+
+    @staticmethod
     def name_of_round():
         """définie le nom d'un round"""
         if os.path.exists("rounds.json"):
@@ -186,14 +217,31 @@ class Controllers:
         """ Initialisation du round"""
         if last_round_in_tournament == 0:
             """lancer la premièrer initialisation, mélange aléatoire des joueurs"""
+            new_registred_players_list = []
             registred_players_list = self["registred_players_list"]
             random.shuffle(registred_players_list)
-            return registred_players_list
+            while True:
+                if not registred_players_list:
+                    break
+                else:
+                    pairs = registred_players_list[:2]
+                    registred_players_list = registred_players_list[2:]
+                    new_registred_players_list.append(pairs)
+            return new_registred_players_list
         else:
-            """créer un nouveau round"""
-            registred_players_list = current_tournament["registred_players_list"]
+            """A finiliser : créer un nouveau round"""
+            new_registred_players_list = []
+            registred_players_list = self["registred_players_list"]
             random.shuffle(registred_players_list)
-            return registred_players_list
+            while True:
+                if not registred_players_list:
+                    break
+                else:
+                    pairs = registred_players_list[:2]
+                    registred_players_list = registred_players_list[2:]
+                    new_registred_players_list.append(pairs)
+            print("no first round")
+            return new_registred_players_list
 
     @staticmethod
     def close_round():
