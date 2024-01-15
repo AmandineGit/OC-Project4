@@ -148,28 +148,11 @@ class View:
 
 
     @staticmethod
-    def prompt_score_matchs(matchs_list):
-        completed_matchs_tuple = []
-        print("Entrer le résultat du match pour chaque joueur :\n")
-        for match in matchs_list:
-            print(matchs_list)
-            while True:
-                print(match[0])
-                print(match[1])
-                score_player1 = input(match[0] + " : ")
-                score_player1 = int(score_player1)
-                if score_player1 > 2:
-                    print("Score incorrect.")
-                    continue
-                elif score_player1 == 1:
-                    score_player2 = 0
-                    player_win = match[0]
-                elif score_player1 == 0:
-                    score_player2 = 1
-                    player_win = match[1]
-                print(player_win + " a gagné le match.")
-                match_score = ([match[0],score_player1],[match[1], score_player2])
-                completed_matchs_tuple.append(match_score)
-                break
-
-        return completed_matchs_tuple
+    def prompt_score_matchs(self, name_player1=None, name_player2=None):
+        if self == 1:
+            print("Entrer le résultat du match pour chaque joueur :\n")
+            return
+        elif self == 2:
+            print("\n* Match opposant " + name_player1[0] + " " + name_player1[1] + " et " + name_player2[0] + " " + name_player2[1])
+            score = input("Score réalisé par " + name_player1[0] + " " + name_player1[1] + " : ")
+            return score

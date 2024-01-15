@@ -40,11 +40,11 @@ class Round:
             if (round.get("start_date") != "01/01/2000 12:00"
                     and round.get("end_date") == "01/01/2000 12:00"):
                 open_round_exist = True
-                name_round_exist = round.get("name")
+                round_exist = round
             else:
                 open_round_exist = False
-                name_round_exist = ""
-        return [open_round_exist, name_round_exist]
+                round_exist = ""
+        return [open_round_exist, round_exist]
 
     @staticmethod
     def last_number_of_round():
@@ -66,28 +66,19 @@ class Round:
             if round.get("name") == self:
                 return round.get("matchs_list")
 
-    """def update_round(self):
-        ""non utilise : 
+    def update_round(self):
+        """non utilise :
         Mise à jour du round dans le json, à utiliser
-        avec un object round complet pour avoir toutes les données du round""
-        round = self.__dict__
+        avec un object round complet pour avoir toutes les données du round"""
         json_round = JsonFile("rounds.json", [])
         rounds_list = JsonFile.read_json(json_round)
         index = -7
         for i, round in enumerate(rounds_list):
-            if round.get("name") == round["name"]:
+            if round.get("name") == self["name"]:
                 index = i
         if index != -1:
-            rounds_list[index] = round
+            rounds_list[index] = self
         json_round.datas_json = rounds_list
-        JsonFile.create_json(json_round)"""
-
-    """def search_round(self):
-        "" Non utilisé Test d'existance d'un round""
-        json_rounds = JsonFile("rounds.json", [])
-        rounds = JsonFile.read_json(json_rounds)
-        print(rouds)
-        for round in rounds:
-            if round.get("name") == self:
-                return True
-        return False"""
+        JsonFile.create_json(json_round)
+        print("\n==> Le fichier " + "rounds.json" + " a été mis à jour")
+        print("le tournoi est cloturé")

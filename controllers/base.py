@@ -139,34 +139,6 @@ class Controllers:
                     return
 
     @staticmethod
-    def old_lauch_round():
-        """Lancer un round"""
-        lauch = View.prompt_lauch_round()
-        while lauch != "n" and lauch != "y":
-            View.display_error_choise()
-            lauch = View.prompt_lauch_round()
-        if lauch == "n":
-            return
-        elif lauch == "y":
-            current_date = datetime.now()
-            current_date = current_date.strftime('%w/%m/%Y %H:%M')
-            round_exist = Round.open_round_exist()
-            while round_exist[0] is True:
-                View.display_error_roundinprogress()
-                Controllers.main_menu()
-            round_name = Controllers.name_of_round()
-
-            current_tournament = (Tournament.current_tournament())
-            last_round_in_tournament = Tournament.last_number_of_round(current_tournament.get("name"))
-            current_tournament["rounds_list"].append(round_name)
-            Tournament.update_tournament(current_tournament)
-
-            matchs_list = Controllers.initialize_round(current_tournament, last_round_in_tournament)
-            Round.record_round(round_name, current_date, matchs_list)
-            View.display_lauch_round(round_name)
-            return
-
-    @staticmethod
     def lauch_round():
         """Lancer un round"""
         while True:
@@ -254,15 +226,49 @@ class Controllers:
             elif choice == "n":
                 Controllers.main_menu()
             elif choice == "y":
-                round_open = Round.open_round_exist()
-                if round_open[0] is False:
+                current_round = Round.open_round_exist()
+                if current_round[0] is False:
                     View.display_error_roundnotinprogress()
                     continue
                 else:
-                    completed_matchs_tuple = Controllers.score_match(round_open[1])
-                    pass
+                    current_round = current_round[1]
+                    completed_matchs_tuple = Controllers.score_match()
+                    current_date = datetime.now()
+                    current_date = current_date.strftime('%w/%m/%Y %H:%M')
+                    current_round["end_date"] = current_date
+                    current_round["matchs_list"] = completed_matchs_tuple
+                    Round.update_round(current_round)
+                    return
 
-    def score_match(self):
-        matchs_list = Round.search_matchslist_round(self)
-        completed_matchs_tuple = View.prompt_score_matchs(matchs_list)
-        print(completed_matchs_tuple)
+    def score_match():
+        current_round = Round.open_round_exist()
+        matchs_list = current_round[1]["matchs_list"]
+        View.prompt_score_matchs(1)
+        completed_matchs_tuple = []
+        for match in matchs_list:
+            while True:
+                name_player1 = Player.search_player_by_id(match[0])
+                name_player2 = Player.search_player_by_id(match[1])
+                score_player1 = View.prompt_score_matchs(2, name_player1, name_player2)
+                score_player1 = int(score_player1)
+                if score_player1 >= 2:
+                    print("Score incorrect.")
+                    continue
+                elif score_player1 == 1:
+                    score_player2 = 0
+                    player_win = match[0]
+                    player_win = Player.search_player_by_id(player_win)
+                    break
+                elif score_player1 == 0:
+                    score_player2 = 1
+                    player_win = match[1]
+                    player_win = Player.search_player_by_id(player_win)
+                    break
+            print(player_win[0] + " " + player_win[1] + " a gagné le match.")
+            match_score = ([match[0],score_player1],[match[1], score_player2])
+            completed_matchs_tuple.append(match_score)
+            matchs_list = matchs_list[1:]
+        return completed_matchs_tuple
+
+
+
