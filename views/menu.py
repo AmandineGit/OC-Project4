@@ -147,6 +147,9 @@ class View:
     def display_win_player(self):
         print(self[0] + " " + self[1] + " a gagné le match.\n")
 
+    def display_equality_player(self, player_win2):
+        print(self[0] + " " + self[1] +" " + player_win2[0] + " " + player_win2[1] +" ont fait match nul.\n")
+
     @staticmethod
     def display_error_score():
         print("Score incorrect.")

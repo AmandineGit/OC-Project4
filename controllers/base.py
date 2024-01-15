@@ -251,7 +251,7 @@ class Controllers:
                 name_player1 = Player.search_player_by_id(match[0])
                 name_player2 = Player.search_player_by_id(match[1])
                 score_player1 = View.prompt_score_matchs(2, name_player1, name_player2)
-                possible_score = ["0", "1"]
+                possible_score = ["0", "1", "0.5"]
                 if score_player1 not in possible_score:
                     View.display_error_score()
                     continue
@@ -259,17 +259,23 @@ class Controllers:
                     score_player2 = 0
                     player_win = match[0]
                     player_win = Player.search_player_by_id(player_win)
+                    View.display_win_player(player_win)
                     break
                 elif score_player1 == "0":
                     score_player2 = 1
                     player_win = match[1]
                     player_win = Player.search_player_by_id(player_win)
+                    View.display_win_player(player_win)
                     break
-            View.display_win_player(player_win)
+                elif score_player1 == "0.5":
+                    score_player2 = 0.5
+                    player_win = match[0]
+                    player_win2 = match[1]
+                    player_win = Player.search_player_by_id(player_win)
+                    player_win2 = Player.search_player_by_id(player_win2)
+                    View.display_equality_player(player_win, player_win2)
+                    break
             match_score = ([match[0],score_player1],[match[1], score_player2])
             completed_matchs_tuple.append(match_score)
             matchs_list = matchs_list[1:]
         return completed_matchs_tuple
-
-
-
