@@ -19,20 +19,22 @@ class Controllers:
             View.display_main_menu()
             available_choices = (0, 1, 2, 3, 4, 5, 6)
             choice = View.prompt_main_menu()
-            choice = int(choice)
-            if choice not in available_choices:
-                View.display_error_menu()
-                continue
-            elif choice == 1:
-                Controllers.create_tournament()
-            elif choice == 2:
-                Controllers.open_tournament()
-            elif choice == 3:
-                Controllers.player_registration()
-            elif choice == 5:
-                Controllers.lauch_round()
-            elif choice == 6:
-                Controllers.close_round()
+            try:
+                choice = int(choice)
+            finally:
+                if choice not in available_choices:
+                    View.display_error_menu()
+                    continue
+                elif choice == 1:
+                    Controllers.create_tournament()
+                elif choice == 2:
+                    Controllers.open_tournament()
+                elif choice == 3:
+                    Controllers.player_registration()
+                elif choice == 5:
+                    Controllers.lauch_round()
+                elif choice == 6:
+                    Controllers.close_round()
 
     @staticmethod
     def create_tournament():
@@ -151,7 +153,10 @@ class Controllers:
             elif choice == "y":
                 current_date = datetime.now()
                 current_date = current_date.strftime('%w/%m/%Y %H:%M')
-                round_exist = Round.open_round_exist()
+                try:
+                    round_exist = Round.open_round_exist()
+                except FileNotFoundError:
+                    round_exist = [False, None]
                 while round_exist[0] is True:
                     View.display_error_roundinprogress()
                     Controllers.main_menu()
@@ -173,7 +178,7 @@ class Controllers:
         """définie le nom d'un round"""
         if os.path.exists("rounds.json"):
             last_round = Round.last_number_of_round()
-            last_number = last_round[-1:]
+            last_number = last_round[5:]
             last_number = int(last_number)
             current_number = last_number + 1
             str(current_number)
@@ -216,29 +221,29 @@ class Controllers:
 
     @staticmethod
     def close_round():
-        while True:
-            available_choices = ["y", "n"]
-            choice = View.prompt_close_round()
-            if choice not in available_choices:
-                View.display_error_choise()
-                continue
-            elif choice == "n":
+        available_choices = ["y", "n"]
+        choice = View.prompt_close_round()
+        if choice not in available_choices:
+            View.display_error_choise()
+            Controllers.main_menu()
+        elif choice == "n":
+            Controllers.main_menu()
+        elif choice == "y":
+            current_round = Round.open_round_exist()
+            if current_round[0] is False:
+                View.display_error_roundnotinprogress()
                 Controllers.main_menu()
-            elif choice == "y":
-                current_round = Round.open_round_exist()
-                if current_round[0] is False:
-                    View.display_error_roundnotinprogress()
-                    continue
-                else:
-                    current_round = current_round[1]
-                    completed_matchs_tuple = Controllers.score_match()
-                    current_date = datetime.now()
-                    current_date = current_date.strftime('%w/%m/%Y %H:%M')
-                    current_round["end_date"] = current_date
-                    current_round["matchs_list"] = completed_matchs_tuple
-                    Round.update_round(current_round)
-                    View.display_close_round(current_round["name"])
-                    return
+            else:
+                current_round = current_round[1]
+                completed_matchs_tuple = Controllers.score_match()
+                current_date = datetime.now()
+                current_date = current_date.strftime('%w/%m/%Y %H:%M')
+                current_round["end_date"] = current_date
+                current_round["matchs_list"] = completed_matchs_tuple
+                Round.update_round(current_round)
+                Controllers.player_score_keeping(completed_matchs_tuple)
+                View.display_close_round(current_round["name"])
+                return
 
     @staticmethod
     def score_match():
@@ -248,9 +253,9 @@ class Controllers:
         completed_matchs_tuple = []
         for match in matchs_list:
             while True:
-                name_player1 = Player.search_player_by_id(match[0])
-                name_player2 = Player.search_player_by_id(match[1])
-                score_player1 = View.prompt_score_matchs(2, name_player1, name_player2)
+                player1 = Player.search_player_by_id(match[0])
+                player2 = Player.search_player_by_id(match[1])
+                score_player1 = View.prompt_score_matchs(2, player1, player2)
                 possible_score = ["0", "1", "0.5"]
                 if score_player1 not in possible_score:
                     View.display_error_score()
@@ -275,7 +280,21 @@ class Controllers:
                     player_win2 = Player.search_player_by_id(player_win2)
                     View.display_equality_player(player_win, player_win2)
                     break
-            match_score = ([match[0], score_player1], [match[1], score_player2])
+            match_score = ([match[0], float(score_player1)],
+                           [match[1], float(score_player2)])
             completed_matchs_tuple.append(match_score)
             matchs_list = matchs_list[1:]
         return completed_matchs_tuple
+
+    def player_score_keeping(self):
+        update_list_players = []
+        for match in self:
+            for player_score in match:
+                player, score = player_score
+                player_object = Player.search_player_by_id(player)
+                if score == 1:
+                    player_object["total_score"] = player_object["total_score"] + 1
+                elif score == 0.5:
+                    player_object["total_score"] = player_object["total_score"] + 0.5
+                update_list_players.append(player_object)
+        Player.update_player(update_list_players)

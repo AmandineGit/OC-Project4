@@ -22,7 +22,6 @@ class View:
     def prompt_main_menu():
         """prompt pour sélectionner un sous menu"""
         main_menu_number = input("Veuillez entrer le numéro de l'action voulue : ")
-        main_menu_number = int(main_menu_number)
         return main_menu_number
 
     @staticmethod
@@ -75,15 +74,14 @@ class View:
         lauch = input("Voulez-vous cloturer le round en cours ? y/n ")
         return lauch
 
-    @staticmethod
     def prompt_score_matchs(self, name_player1=None, name_player2=None):
         if self == 1:
             print("Entrer le résultat du match pour chaque joueur :\n")
             return
         elif self == 2:
-            print("* Match opposant " + name_player1[0] + " " + name_player1[1] + " et "
-                  + name_player2[0] + " " + name_player2[1])
-            score = input("Score réalisé par " + name_player1[0] + " " + name_player1[1] + " : ")
+            print("* Match opposant " + name_player1["first_name"] + " " + name_player1["last_name"] + " et "
+                  + name_player2["first_name"] + " " + name_player2["last_name"])
+            score = input("Score réalisé par " + name_player1["first_name"] + " " + name_player1["last_name"] + " : ")
             return score
 
     def display_register_player(self):
@@ -147,10 +145,11 @@ class View:
         print("==> Le round " + self + " est cloturé.\n")
 
     def display_win_player(self):
-        print(self[0] + " " + self[1] + " a gagné le match.\n")
+        print(self["first_name"] + " " + self["last_name"] + " a gagné le match.\n")
 
     def display_equality_player(self, player_win2):
-        print(self[0] + " " + self[1] + " " + player_win2[0] + " " + player_win2[1] + " ont fait match nul.\n")
+        print(self["first_name"] + " " + self["last_name"] + " " + player_win2["first_name"]
+              + " " + player_win2["last_name"] + " ont fait match nul.\n")
 
     @staticmethod
     def display_error_score():
