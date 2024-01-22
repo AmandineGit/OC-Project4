@@ -9,7 +9,7 @@ class Tournament:
     end_date = datetime.date
 
     def __init__(self, name, location, registred_players_list=None, number_of_round=4, description="",
-                 start_date="01/01/2000", rounds_list=None, current_round_number=0, end_date="01/01/2000"):
+                 start_date="01/01/2000", rounds_list=None, current_round_number=0, end_date="01/01/2000", matchs_list=[]):
         self.name = name
         self.location = location
         if registred_players_list is None:
@@ -22,6 +22,7 @@ class Tournament:
         self.start_date = start_date
         self.current_round_number = current_round_number
         self.end_date = end_date
+        self.matchs_list = matchs_list
 
     def __repr__(self):
         """ représentation de l objet de type Tournament"""
@@ -35,8 +36,6 @@ class Tournament:
             json_file = tournament.__dict__
             json_tournament = JsonFile("tournaments.json", json_file)
             JsonFile.append_json(json_tournament)
-            print("\n==> Le fichier " + "tournaments.json" +
-                  " a été mis à jour.\n Le tournoi " + self.name + " a été enregistré")
             return tournament_exist
         else:
             return tournament_exist

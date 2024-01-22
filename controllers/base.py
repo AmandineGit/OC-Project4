@@ -67,7 +67,7 @@ class Controllers:
                             tournament["start_date"] = datas_open_tournament[1]
                             Tournament.update_tournament(tournament)
                             View.display_open_tournament(tournament_name, open_date)
-                            Controllers.create_players()
+                            Controllers.player_registration()
                 else:
                     View.display_error_tournament(tournament_name)
         Controllers.main_menu()
@@ -119,7 +119,7 @@ class Controllers:
                 """si le tournoi saisie n'existe pas, le user est invité à saisir à nouveau"""
                 View.display_error_tournament(tournament_name)
                 continue
-            elif tournament_exist is True:
+            else:
                 break
         json_tournament = JsonFile("tournaments.json", [])
         tournaments = JsonFile.read_json(json_tournament)
@@ -162,15 +162,22 @@ class Controllers:
                     Controllers.main_menu()
                 round_name = Controllers.name_of_round()
                 current_tournament = (Tournament.current_tournament())
-                last_round_in_tournament = Tournament.last_number_of_round(current_tournament.get("name"))
-                current_tournament["rounds_list"].append(round_name)
-                round_number = round_name[5:]
-                round_number = int(round_number)
-                current_tournament["current_round_number"] = round_number
-                Tournament.update_tournament(current_tournament)
-                matchs_list = Controllers.initialize_round(current_tournament, last_round_in_tournament)
-                Round.record_round(round_name, current_date, matchs_list)
-                View.display_lauch_round(round_name)
+                if current_tournament is None:
+                    View.display_error_tournement_notinprogress()
+                else:
+                    last_round_in_tournament = Tournament.last_number_of_round(current_tournament.get("name"))
+                    current_tournament["rounds_list"].append(round_name)
+                    round_number = round_name[5:]
+                    round_number = int(round_number)
+                    current_tournament["current_round_number"] = round_number
+                    matchs_list = Controllers.initialize_round(current_tournament, last_round_in_tournament)
+                    old_matchs_list = current_tournament["matchs_list"]
+                    for match in matchs_list:
+                        old_matchs_list.append(match)
+                    current_tournament["matchs_list"] = old_matchs_list
+                    Tournament.update_tournament(current_tournament)
+                    Round.record_round(round_name, current_date, matchs_list)
+                    View.display_lauch_round(round_name)
                 return
 
     @staticmethod
@@ -205,19 +212,38 @@ class Controllers:
                     new_registred_players_list.append(pairs)
             return new_registred_players_list
         else:
-            """A finiliser : créer un nouveau round"""
+            """Créer la liste des matchs en triant les players 
+            en fonction de leur score total en évitant les doublons"""
             new_registred_players_list = []
             registred_players_list = self["registred_players_list"]
-            random.shuffle(registred_players_list)
+            sort_registred_players_list = Controllers.sort_players(registred_players_list)
             while True:
-                if not registred_players_list:
+                if not sort_registred_players_list:
                     break
                 else:
-                    pairs = registred_players_list[:2]
-                    registred_players_list = registred_players_list[2:]
+                    x = 0
+                    y = 1
+                    pairs = [sort_registred_players_list[x], sort_registred_players_list[y]]
+                    pairs = [pairs[0][0], pairs[1][0]]
+                    while pairs in self["matchs_list"]:
+                        y = y+1
+                        pairs = [sort_registred_players_list[x][0], sort_registred_players_list[y][0]]
+                    else:
+                        sort_registred_players_list.pop(x)
+                        sort_registred_players_list.pop(y-1)
                     new_registred_players_list.append(pairs)
-            print("no first round")
+                    x = x+1
+                    y = y+1
             return new_registred_players_list
+
+    def sort_players(self):
+        """Tri une liste de joeurs en fonction de leur score et renvoi la liste triée avec les scores"""
+        registred_players_list = []
+        for player in self:
+            datas_player = Player.search_player_by_id(player)
+            registred_players_list.append([datas_player["national_chess_id"], datas_player["total_score"]])
+        sort_registred_players_list = sorted(registred_players_list, key=lambda x: x[1])
+        return sort_registred_players_list
 
     @staticmethod
     def close_round():

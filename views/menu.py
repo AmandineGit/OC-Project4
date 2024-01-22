@@ -138,6 +138,11 @@ class View:
         """Affiche un message indiquant une erreur sur le choix"""
         print("\nLe joueur est déjà inscrit sur ce tournoi.")
 
+    @staticmethod
+    def display_error_tournement_notinprogress():
+        """Affiche un message indiquant qu'il n'y a pas de tourno en cours"""
+        print("\nIl n'y a pas de tournoi en cours.\nVeuillez ouvrir un tournoi pour lancer un round.\n")
+
     def display_lauch_round(self):
         print("==> Le round " + self + " est lancé.\n")
 
