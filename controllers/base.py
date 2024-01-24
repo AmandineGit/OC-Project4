@@ -152,8 +152,7 @@ class Controllers:
                 Controllers.main_menu()
             elif choice == "y":
                 current_date = datetime.now()
-                current_date = current_date.strftime('%w/%m/%Y %H:%M')
-
+                current_date = current_date.strftime('%d/%m/%Y %H:%M')
                 try:
                     round_exist = Round.open_round_exist()
                 except FileNotFoundError:
@@ -266,7 +265,7 @@ class Controllers:
                 current_round = current_round[1]
                 completed_matchs_tuple = Controllers.score_match()
                 current_date = datetime.now()
-                current_date = current_date.strftime('%w/%m/%Y %H:%M')
+                current_date = current_date.strftime('%d/%m/%Y %H:%M')
                 current_round["end_date"] = current_date
                 current_round["matchs_list"] = completed_matchs_tuple
                 Round.update_round(current_round)
@@ -339,7 +338,7 @@ class Controllers:
             return
         else:
             current_date = datetime.now()
-            current_date = current_date.strftime('%w/%m/%Y')
+            current_date = current_date.strftime('%d/%m/%Y')
             tournament["end_date"] = current_date
             Tournament.update_tournament(tournament)
             View.display_close_tournament(tournament["name"])
