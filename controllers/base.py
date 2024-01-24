@@ -218,13 +218,16 @@ class Controllers:
             en fonction de leur score total en évitant les doublons"""
             sort_registred_players_list = Controllers.sort_players(registred_players_list)
             sort_registred_players_list = [couple[0] for couple in sort_registred_players_list]
-            while len(sort_registred_players_list) > 1:
+            while len(sort_registred_players_list) >= 2:
                 j = 2
                 pairs = [sort_registred_players_list[0], sort_registred_players_list[1]]
-                if len(sort_registred_players_list) > 2:
+                if len(sort_registred_players_list) >= 3:
                     while pairs in tournament_matchs_list:
                         pairs = [sort_registred_players_list[0], sort_registred_players_list[j]]
-                        j += 1
+                        if j < len(sort_registred_players_list):
+                            j += 1
+                        else:
+                            break
                 pairs_inv = [pairs[1], pairs[0]]
                 matchs_list.append(pairs)
                 tournament_matchs_list.append(pairs_inv)
