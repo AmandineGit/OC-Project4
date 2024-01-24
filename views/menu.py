@@ -13,10 +13,9 @@ class View:
         print("1. Créer un tournoi")
         print("2. Ouvrir un tournoi")
         print("3. Inscrire des joueurs à un tournoi")
-        print("4. Cloturer un tournoi")
-        print("5. Lancer un round")
-        print("6. Cloturer un round")
-        print("7. Afficher un rapport\n")
+        print("4. Lancer un round")
+        print("5. Cloturer un round")
+        print("6. Afficher un rapport\n")
 
     @staticmethod
     def prompt_main_menu():
@@ -148,6 +147,9 @@ class View:
 
     def display_close_round(self):
         print("==> Le round " + self + " est cloturé.\n")
+
+    def display_close_tournament(self):
+        print("==> Le tournoi " + self + " est cloturé.\n")
 
     def display_win_player(self):
         print(self["first_name"] + " " + self["last_name"] + " a gagné le match.\n")

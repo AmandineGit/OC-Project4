@@ -24,7 +24,7 @@ class Tournament:
         self.end_date = end_date
         self.matchs_list = matchs_list
 
-    def __repr__(self):
+    def __str__(self):
         """ représentation de l objet de type Tournament"""
         return self.name
 
@@ -58,11 +58,17 @@ class Tournament:
     def search_tournament(self):
         """Test d'existance d'un tournoi"""
         json_tournaments = JsonFile("tournaments.json", [])
-        tournaments = JsonFile.read_json(json_tournaments)
-        for tournament in tournaments:
-            if tournament.get("name") == self:
-                return True
-        return False
+        try:
+            tournaments = JsonFile.read_json(json_tournaments)
+            for tournament in tournaments:
+                if tournament.get("name") == self:
+                    return True
+                else:
+                    return False
+        except FileNotFoundError:
+            return False
+
+
 
     @staticmethod
     def current_tournament():
