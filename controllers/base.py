@@ -39,8 +39,8 @@ class Controllers:
     @staticmethod
     def create_tournament():
         """Création d'un tournoi"""
-        name, location = View.prompt_create_tournament()
-        tournament_exist = Tournament.record_tournament(name, location)
+        name, location, description = View.prompt_create_tournament()
+        tournament_exist = Tournament.record_tournament(name, location, description=description)
         if tournament_exist is False:
             View.display_create_tournament(name)
         elif tournament_exist is True:
@@ -59,7 +59,8 @@ class Controllers:
             else:
                 open_date = str(datas_open_tournament[1])
                 tournament_name = (datas_open_tournament[0])
-                if Tournament.search_tournament(tournament_name) is True:
+                search_tournement = Tournament.search_tournament(tournament_name)
+                if search_tournement is True:
                     json_tournament = JsonFile("tournaments.json", [])
                     tournaments = JsonFile.read_json(json_tournament)
                     for tournament in tournaments:
@@ -68,7 +69,9 @@ class Controllers:
                             Tournament.update_tournament(tournament)
                             View.display_open_tournament(tournament_name, open_date)
                             Controllers.player_registration()
-                else:
+                elif search_tournement == "already_closed":
+                    View.display_error_tournament_already_closed()
+                elif search_tournement is False:
                     View.display_error_tournament(tournament_name)
         Controllers.main_menu()
 

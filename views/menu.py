@@ -29,7 +29,8 @@ class View:
         print("\n===> Création du Tournoi")
         tournament_location = input("\nVeuillez indiquer le lieu du tournoi : ")
         tournament_name = input("Veuillez indiquer le nom du tournoi : ")
-        return tournament_name, tournament_location
+        tournament_description = input("Vous pouvez ajouter une description : ")
+        return tournament_name, tournament_location, tournament_description
 
     @staticmethod
     def prompt_open_tournament():
@@ -116,6 +117,11 @@ class View:
     def display_error_tournamentinprogress():
         """Affiche un message indiquant qu'un tournoi est deja en cours"""
         print("Un tournoi est déjà en cours, vous ne pouvez pas en ouvrir un second.\n")
+
+    @staticmethod
+    def display_error_tournament_already_closed():
+        """Affiche un message indiquant qu'un tournoi est deja en cours"""
+        print("Le tournoi est déjà clos, vous ne pouvez pas l'ouvrir une seconde fois.\n")
 
     @staticmethod
     def display_error_roundinprogress():
