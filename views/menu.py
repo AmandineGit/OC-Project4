@@ -8,7 +8,7 @@ class View:
 
     @staticmethod
     def display_main_menu():
-        """Affichage du menu principal des sous menus"""
+        """Affichage du menu principal"""
         print("Gestion des tournois\n")
         print("1. Créer un tournoi")
         print("2. Ouvrir un tournoi")
@@ -18,10 +18,10 @@ class View:
         print("6. Afficher un rapport\n")
 
     @staticmethod
-    def prompt_main_menu():
+    def prompt_menu():
         """prompt pour sélectionner un sous menu"""
-        main_menu_number = input("Veuillez entrer le numéro de l'action voulue : ")
-        return main_menu_number
+        menu_number = input("Veuillez entrer le numéro de l'action voulue : ")
+        return menu_number
 
     @staticmethod
     def prompt_create_tournament():
@@ -168,6 +168,10 @@ class View:
     def display_error_score():
         print("Score incorrect.")
 
+    @staticmethod
+    def display_create_players_report():
+        print("Votre rapport a été crée.")
+
     def test_date(self):
         """Valide la saisie d'une date"""
         date_str = self
@@ -180,3 +184,12 @@ class View:
                 print("Format de date incorrect. Veuillez réessayer.")
                 date_str = input("Veuillez indiquer une date sous le format jj/mm/yy : ")
         return date_str
+
+    @staticmethod
+    def display_report_menu():
+        """Affichage du menu d'affichage des reports"""
+        print("\nAffichage des raports\n")
+        print("1. Afficher la liste des joueurs.")
+        print("2. Afficher la liste des tournois.")
+        print("3. Rechercher un tournoi.")
+        print("4. Revenir au menu principal.\n")

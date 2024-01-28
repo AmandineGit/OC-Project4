@@ -17,8 +17,8 @@ class Controllers:
         """Gestion des sous menu avec une boucle infinie"""
         while True:
             View.display_main_menu()
-            available_choices = (0, 1, 2, 3, 4, 5)
-            choice = View.prompt_main_menu()
+            available_choices = (1, 2, 3, 4, 5, 6)
+            choice = View.prompt_menu()
             try:
                 choice = int(choice)
             finally:
@@ -35,6 +35,8 @@ class Controllers:
                     Controllers.lauch_round()
                 elif choice == 5:
                     Controllers.close_round()
+                elif choice == 6:
+                    Controllers.reports_submenu()
 
     @staticmethod
     def create_tournament():
@@ -346,3 +348,57 @@ class Controllers:
             Tournament.update_tournament(tournament)
             View.display_close_tournament(tournament["name"])
             return
+
+    @staticmethod
+    def reports_submenu():
+        """Gestion des sous menu avec une boucle infinie"""
+        while True:
+            View.display_report_menu()
+            available_choices = (1, 2, 3, 4)
+            choice = View.prompt_menu()
+            try:
+                choice = int(choice)
+            finally:
+                if choice not in available_choices:
+                    View.display_error_menu()
+                    continue
+                elif choice == 1:
+                    Controllers.display_players_report()
+                elif choice == 2:
+                    pass
+                elif choice ==3:
+                    pass
+                elif choice ==4:
+                    Controllers.main_menu()
+
+    @staticmethod
+    def display_players_report():
+        """Affiche la liste des joeurs et l'enregistre
+        dans un fichier html, la liste est classé par ordre alphabétique"""
+        print("\n Liste des joueurs enregistrés :\n")
+        json_player = JsonFile("players.json", [])
+        players = JsonFile.read_json(json_player)
+        players_report = "RAPPORT : liste des joueurs enregistrés.<br><br><table border='1'>"
+        players.insert(0, {"first_name":"Prénom", "last_name":"Nom", "date_of_birth":"Date de naissance",
+                           "national_chess_id":"ID", "total_score":"Score total"})
+        name_players = []
+        for player in players:
+            name_players.append(player["last_name"])
+        print(name_players)
+        name_sorted_players = name_players.sort()
+        print(name_sorted_players)
+        """for player in players:
+            for name_player in name_sorted_players:
+                if player.get("last_name") == name_player:
+                    name_sorted_players.remove(name_player)
+                    sorted_player = player
+                print(sorted_player["last_name"] + " " + sorted_player["first_name"])
+            for cle, i in sorted_player.items():
+                players_report += "<tr>"
+                players_report += f"<td>{i}</td>"
+            players_report += "</tr>"
+
+        players_report += "</table>"
+        with open("report_players.html", "w") as fichier:
+            fichier.write(players_report)"""
+
