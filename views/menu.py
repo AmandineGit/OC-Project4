@@ -84,6 +84,33 @@ class View:
             score = input("Score réalisé par " + name_player1["first_name"] + " " + name_player1["last_name"] + " : ")
             return score
 
+    @staticmethod
+    def prompt_search_tournament():
+        """Prompt pour rechercher un tournoi """
+        tournament_name = input("Veuillez entrer le nom du tournoi :\n")
+        return tournament_name
+
+    def prompt_search_players_tournament(self):
+        """Prompt pour demander s'il faut effectuer l'affichage des joueurs """
+        choice = input("\nVoulez-vous afficher la liste des joueurs du tournoi " + self["name"] + " ? (y/n)\n")
+        return choice
+
+    def prompt_search_rounds_tournament(self):
+        """Prompt pour demander s'il faut effectuer l'affichage des rounds """
+        choice = input("\nVoulez-vous afficher la liste des rounds du tournoi " + self["name"] + " ? (y/n)\n")
+        return choice
+
+    def prompt_search_matchs_tournament(self):
+        """Prompt pour demander s'il faut effectuer l'affichage des matchs d'un round """
+        choice = input("\nVoulez-vous afficher la liste des matchs d'un round du tournoi " + self["name"] + " ? (y/n)\n")
+        return choice
+
+    @staticmethod
+    def prompt_name_round():
+        """Prompt pour demander le nom d'un round du tournoi et renvoi le nom"""
+        round_name = input("\nEntrer le nom du round :\n")
+        return round_name
+
     def display_register_player(self):
         """Affiche un message confirmant l'inscription du player"""
         print("===> Le joueur est inscrit au tournoi " + self + ".\n")
@@ -169,8 +196,36 @@ class View:
         print("Score incorrect.")
 
     @staticmethod
-    def display_create_players_report():
-        print("Votre rapport a été crée.")
+    def display_create_report():
+        print("\nVotre rapport a été crée, il se trouve dans le dossier racine au format html.")
+
+    def display_result_search_tournement(self):
+        if self["end_date"] == "01/01/2000":
+            if self["start_date"] == "01/01/2000":
+                print("Le tournoi " + self["name"] + " n'est pas encore planifié.")
+                return 0
+            else:
+                print("Le "+ self["name"] + " est prévue le "+ self["start_date"])
+                return 1
+        else:
+            print("Le "+ self["name"] + " a démarré le "+ self["start_date"] +
+                  " et s'est terminé le " + self["end_date"])
+            return 2
+
+    def display_players_tournement(self):
+        """Affiche le nom complet d'un joueur"""
+        print(self[0] + " " + self[1])
+
+    def display_rounds_tournement(self):
+        """Affiche le nom complet d'un joueur"""
+        print(self)
+
+    def display_match_winner(self, losing_player):
+        print(self + " a reporté le match contre " + losing_player)
+
+    def display_match_equality(self, player2):
+        print(self + " et " + player2
+              + " ont fait match nul.")
 
     def test_date(self):
         """Valide la saisie d'une date"""

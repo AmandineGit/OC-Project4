@@ -64,9 +64,11 @@ class Tournament:
             for tournament in tournaments:
                 if tournament.get("name") == self:
                     if tournament.get("rounds_list") == []:
-                        return True
+                        retour = [True, tournament]
+                        return retour
                     else:
-                        return "already_closed"
+                        retour = ["already_closed", tournament]
+                        return retour
             return False
         except FileNotFoundError:
             return False

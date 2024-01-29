@@ -62,7 +62,7 @@ class Controllers:
                 open_date = str(datas_open_tournament[1])
                 tournament_name = (datas_open_tournament[0])
                 search_tournement = Tournament.search_tournament(tournament_name)
-                if search_tournement is True:
+                if search_tournement[0] is True:
                     json_tournament = JsonFile("tournaments.json", [])
                     tournaments = JsonFile.read_json(json_tournament)
                     for tournament in tournaments:
@@ -71,7 +71,7 @@ class Controllers:
                             Tournament.update_tournament(tournament)
                             View.display_open_tournament(tournament_name, open_date)
                             Controllers.player_registration()
-                elif search_tournement == "already_closed":
+                elif search_tournement[0] == "already_closed":
                     View.display_error_tournament_already_closed()
                 elif search_tournement is False:
                     View.display_error_tournament(tournament_name)
@@ -365,40 +365,134 @@ class Controllers:
                 elif choice == 1:
                     Controllers.display_players_report()
                 elif choice == 2:
-                    pass
+                    Controllers.display_tournaments_report()
                 elif choice ==3:
-                    pass
+                    Controllers.display_datas_tournament()
                 elif choice ==4:
                     Controllers.main_menu()
 
     @staticmethod
     def display_players_report():
-        """Affiche la liste des joeurs et l'enregistre
+        """Affiche la liste des joueurs et l'enregistre
         dans un fichier html, la liste est classé par ordre alphabétique"""
         print("\n Liste des joueurs enregistrés :\n")
         json_player = JsonFile("players.json", [])
         players = JsonFile.read_json(json_player)
+        sorted_players = sorted(players, key=lambda player: player["last_name"].lower())
         players_report = "RAPPORT : liste des joueurs enregistrés.<br><br><table border='1'>"
-        players.insert(0, {"first_name":"Prénom", "last_name":"Nom", "date_of_birth":"Date de naissance",
+        sorted_players.insert(0, {"first_name":"Prénom", "last_name":"Nom", "date_of_birth":"Date de naissance",
                            "national_chess_id":"ID", "total_score":"Score total"})
-        name_players = []
-        for player in players:
-            name_players.append(player["last_name"])
-        print(name_players)
-        name_sorted_players = name_players.sort()
-        print(name_sorted_players)
-        """for player in players:
-            for name_player in name_sorted_players:
-                if player.get("last_name") == name_player:
-                    name_sorted_players.remove(name_player)
-                    sorted_player = player
-                print(sorted_player["last_name"] + " " + sorted_player["first_name"])
-            for cle, i in sorted_player.items():
-                players_report += "<tr>"
+        for player in sorted_players:
+            print(player["last_name"] + " " + player["first_name"])
+            players_report += "<tr>"
+            for cle, i in player.items():
                 players_report += f"<td>{i}</td>"
             players_report += "</tr>"
-
         players_report += "</table>"
         with open("report_players.html", "w") as fichier:
-            fichier.write(players_report)"""
+            fichier.write(players_report)
+        View.display_create_report()
 
+    @staticmethod
+    def display_tournaments_report():
+        """Affiche la liste des tournois et l'enregistre
+        dans un fichier html, la liste est classé par ordre alphabétique"""
+        print("\n Liste des tournois enregistrés :\n")
+        json_tournaments = JsonFile("tournaments.json", [])
+        tournaments = JsonFile.read_json(json_tournaments)
+        for tournament in tournaments:
+            for cle in list(tournament.keys()):
+                if cle != "name" and cle!= "location":
+                    tournament.pop(cle)
+        tournaments_report = "RAPPORT : liste des tournois enregistrés.<br><br><table border='1'>"
+        tournaments.insert(0, {"name":"Nom du tournoi", "location":"Lieu"})
+        for tournament in tournaments:
+            if tournament["name"] != "Nom du tournoi":
+                print(tournament["name"] + " à " + tournament["location"])
+            tournaments_report += "<tr>"
+            for cle, i in tournament.items():
+                tournaments_report += f"<td>{i}</td>"
+            tournaments_report += "</tr>"
+        tournaments_report += "</table>"
+        with open("report_tournaments.html", "w") as fichier:
+            fichier.write(tournaments_report)
+        View.display_create_report()
+
+    @staticmethod
+    def display_datas_tournament():
+        """Affiche les infos d'un tournoi, dates, joueurs, rounds, matchs"""
+        name_tournament = View.prompt_search_tournament()
+        return_search_tournament = Tournament.search_tournament(name_tournament)
+        if return_search_tournament == False:
+            View.display_error_tournament(name_tournament)
+            Controllers.reports_submenu()
+        else:
+            pass
+        tournament = return_search_tournament[1]
+        View.display_result_search_tournement(tournament)
+
+        while True:
+            choice_available = ["y", "n"]
+            choice = View.prompt_search_players_tournament(tournament)
+            if choice not in choice_available:
+                View.display_error_choise()
+                continue
+            elif choice == "n":
+                Controllers.reports_submenu()
+            elif choice == "y":
+                for player in tournament["registred_players_list"]:
+                    object_player = Player.search_player_by_id(player)
+                    name_player = [object_player["last_name"], object_player["first_name"]]
+                    View.display_players_tournement(name_player)
+                break
+
+        while True:
+            choice_available = ["y", "n"]
+            choice = View.prompt_search_rounds_tournament(tournament)
+            if choice not in choice_available:
+                View.display_error_choise()
+                continue
+            elif choice == "n":
+                Controllers.reports_submenu()
+            elif choice == "y":
+                for round in tournament["rounds_list"]:
+                    View.display_rounds_tournement(round)
+                break
+
+        while True:
+            choice_available = ["y", "n"]
+            choice = View.prompt_search_matchs_tournament(tournament)
+            if choice not in choice_available:
+                View.display_error_choise()
+                continue
+            elif choice == "n":
+                Controllers.reports_submenu()
+            elif choice == "y":
+                name_round = View.prompt_name_round()
+                matchs_list = Round.search_matchslist_round(name_round)
+                for match in matchs_list:
+                    if match[0][1] == 1.0:
+                        winning_player = match[0][0]
+                        winning_player = (Player.search_player_by_id(winning_player)["first_name"] + " "
+                                          + Player.search_player_by_id(winning_player)["last_name"])
+                        losing_player = match [1][0]
+                        losing_player = (Player.search_player_by_id(losing_player)["first_name"] + " "
+                                         + Player.search_player_by_id(losing_player)["last_name"])
+                        View.display_match_winner(winning_player, losing_player)
+                    elif match[0][1] == 0.0:
+                        losing_player = match[0][0]
+                        losing_player = (Player.search_player_by_id(losing_player)["first_name"] + " "
+                                          + Player.search_player_by_id(losing_player)["last_name"])
+                        winning_player = match [1][0]
+                        winning_player = (Player.search_player_by_id(winning_player)["first_name"] + " "
+                                         + Player.search_player_by_id(winning_player)["last_name"])
+                        View.display_match_winner(winning_player, losing_player)
+                    if match[0][1] == 0.5:
+                        player = match[0][0]
+                        player = (Player.search_player_by_id(player)["first_name"] + " "
+                                          + Player.search_player_by_id(player)["last_name"])
+                        player2 = match [1][0]
+                        player2 = (Player.search_player_by_id(player2)["first_name"] + " "
+                                         + Player.search_player_by_id(player2)["last_name"])
+                        View.display_match_equality(player, player2)
+                continue

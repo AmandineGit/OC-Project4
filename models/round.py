@@ -59,7 +59,7 @@ class Round:
         return lauch
 
     def search_matchslist_round(self):
-        """Renvoi la list des matchs d'un round """
+        """Renvoi la list des matchs d'un round à partir de son nom"""
         json_rounds = JsonFile("rounds.json", [])
         rounds = JsonFile.read_json(json_rounds)
         for round in rounds:
@@ -81,3 +81,14 @@ class Round:
         json_round.datas_json = rounds_list
         JsonFile.create_json(json_round)
         print("\n==> Le fichier " + "rounds.json" + " a été mis à jour")
+
+    def search_round(self):
+        """recherche et renvoi un booleen et le round ou None"""
+        json_round = JsonFile("rounds.json", [])
+        rounds = JsonFile.read_json(json_round)
+        for round in rounds:
+            if round.get("name") == self:
+                round_exist = True
+            else:
+                round_exist = False
+        return [round_exist, round]

@@ -5,4 +5,4 @@ from models.tournament import Tournament
 
 #tournament = Tournament.current_tournament()
 Controllers.main_menu()
-#Controllers.create_pairs(tournament, 5)
+#print(Tournament.search_tournament("Nord tour"))
