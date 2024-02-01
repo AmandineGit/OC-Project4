@@ -323,7 +323,7 @@ class Controllers:
         return completed_matchs_tuple
 
     def player_score_keeping(self):
-        """Calcul et met à joour le total_score des players dans players.json"""
+        """Calcul et met à jour le total_score des players dans players.json"""
         update_list_players = []
         for match in self:
             for player_score in match:
@@ -366,9 +366,9 @@ class Controllers:
                     Controllers.display_players_report()
                 elif choice == 2:
                     Controllers.display_tournaments_report()
-                elif choice ==3:
+                elif choice == 3:
                     Controllers.display_datas_tournament()
-                elif choice ==4:
+                elif choice == 4:
                     Controllers.main_menu()
 
     @staticmethod
@@ -380,8 +380,9 @@ class Controllers:
         players = JsonFile.read_json(json_player)
         sorted_players = sorted(players, key=lambda player: player["last_name"].lower())
         players_report = "RAPPORT : liste des joueurs enregistrés.<br><br><table border='1'>"
-        sorted_players.insert(0, {"first_name":"Prénom", "last_name":"Nom", "date_of_birth":"Date de naissance",
-                           "national_chess_id":"ID", "total_score":"Score total"})
+        sorted_players.insert(0, {"first_name": "Prénom", "last_name": "Nom",
+                                  "date_of_birth": "Date de naissance", "national_chess_id": "ID",
+                                  "total_score": "Score total"})
         for player in sorted_players:
             print(player["last_name"] + " " + player["first_name"])
             players_report += "<tr>"
@@ -402,10 +403,10 @@ class Controllers:
         tournaments = JsonFile.read_json(json_tournaments)
         for tournament in tournaments:
             for cle in list(tournament.keys()):
-                if cle != "name" and cle!= "location":
+                if cle != "name" and cle != "location":
                     tournament.pop(cle)
         tournaments_report = "RAPPORT : liste des tournois enregistrés.<br><br><table border='1'>"
-        tournaments.insert(0, {"name":"Nom du tournoi", "location":"Lieu"})
+        tournaments.insert(0, {"name": "Nom du tournoi", "location": "Lieu"})
         for tournament in tournaments:
             if tournament["name"] != "Nom du tournoi":
                 print(tournament["name"] + " à " + tournament["location"])
@@ -423,7 +424,7 @@ class Controllers:
         """Affiche les infos d'un tournoi, dates, joueurs, rounds, matchs"""
         name_tournament = View.prompt_search_tournament()
         return_search_tournament = Tournament.search_tournament(name_tournament)
-        if return_search_tournament == False:
+        if return_search_tournament is False:
             View.display_error_tournament(name_tournament)
             Controllers.reports_submenu()
         else:
@@ -473,26 +474,26 @@ class Controllers:
                 for match in matchs_list:
                     if match[0][1] == 1.0:
                         winning_player = match[0][0]
-                        winning_player = (Player.search_player_by_id(winning_player)["first_name"] + " "
-                                          + Player.search_player_by_id(winning_player)["last_name"])
+                        winning_player = (Player.search_player_by_id(winning_player)["first_name"]
+                                          + " " + Player.search_player_by_id(winning_player)["last_name"])
                         losing_player = match [1][0]
-                        losing_player = (Player.search_player_by_id(losing_player)["first_name"] + " "
-                                         + Player.search_player_by_id(losing_player)["last_name"])
+                        losing_player = (Player.search_player_by_id(losing_player)["first_name"]
+                                         + " " + Player.search_player_by_id(losing_player)["last_name"])
                         View.display_match_winner(winning_player, losing_player)
                     elif match[0][1] == 0.0:
                         losing_player = match[0][0]
-                        losing_player = (Player.search_player_by_id(losing_player)["first_name"] + " "
-                                          + Player.search_player_by_id(losing_player)["last_name"])
+                        losing_player = (Player.search_player_by_id(losing_player)["first_name"]
+                                         + " " + Player.search_player_by_id(losing_player)["last_name"])
                         winning_player = match [1][0]
-                        winning_player = (Player.search_player_by_id(winning_player)["first_name"] + " "
-                                         + Player.search_player_by_id(winning_player)["last_name"])
+                        winning_player = (Player.search_player_by_id(winning_player)["first_name"]
+                                          + " " + Player.search_player_by_id(winning_player)["last_name"])
                         View.display_match_winner(winning_player, losing_player)
                     if match[0][1] == 0.5:
                         player = match[0][0]
-                        player = (Player.search_player_by_id(player)["first_name"] + " "
-                                          + Player.search_player_by_id(player)["last_name"])
+                        player = (Player.search_player_by_id(player)["first_name"]
+                                  + " " + Player.search_player_by_id(player)["last_name"])
                         player2 = match [1][0]
-                        player2 = (Player.search_player_by_id(player2)["first_name"] + " "
-                                         + Player.search_player_by_id(player2)["last_name"])
+                        player2 = (Player.search_player_by_id(player2)["first_name"]
+                                   + " " + Player.search_player_by_id(player2)["last_name"])
                         View.display_match_equality(player, player2)
                 continue

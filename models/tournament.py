@@ -63,7 +63,7 @@ class Tournament:
             tournaments = JsonFile.read_json(json_tournaments)
             for tournament in tournaments:
                 if tournament.get("name") == self:
-                    if tournament.get("rounds_list") == []:
+                    if tournament.get("rounds_list") is []:
                         retour = [True, tournament]
                         return retour
                     else:

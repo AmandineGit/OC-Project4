@@ -102,7 +102,8 @@ class View:
 
     def prompt_search_matchs_tournament(self):
         """Prompt pour demander s'il faut effectuer l'affichage des matchs d'un round """
-        choice = input("\nVoulez-vous afficher la liste des matchs d'un round du tournoi " + self["name"] + " ? (y/n)\n")
+        choice = input("\nVoulez-vous afficher la liste des matchs d'un round du tournoi "
+                       + self["name"] + " ? (y/n)\n")
         return choice
 
     @staticmethod
@@ -205,10 +206,10 @@ class View:
                 print("Le tournoi " + self["name"] + " n'est pas encore planifié.")
                 return 0
             else:
-                print("Le "+ self["name"] + " est prévue le "+ self["start_date"])
+                print("Le " + self["name"] + " est prévue le " + self["start_date"])
                 return 1
         else:
-            print("Le "+ self["name"] + " a démarré le "+ self["start_date"] +
+            print("Le " + self["name"] + " a démarré le " + self["start_date"] +
                   " et s'est terminé le " + self["end_date"])
             return 2
 

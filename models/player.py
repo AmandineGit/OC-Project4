@@ -29,12 +29,15 @@ class Player:
         first_name, last_name, date_of_birth = self
         json_player = JsonFile("players.json", [])
         players = JsonFile.read_json(json_player)
-        for player in players:
-            if (player.get("last_name") == last_name
-                    and player.get("first_name") == first_name)\
-                    and player.get("date_of_birth") == date_of_birth:
-                return player.get("national_chess_id")
-        return False
+        if players is False:
+            return False
+        else:
+            for player in players:
+                if ((player.get("last_name") == last_name
+                    and player.get("first_name") == first_name)
+                        and player.get("date_of_birth") == date_of_birth):
+                    return player.get("national_chess_id")
+                return False
 
     @staticmethod
     def create_national_chess_id():
@@ -54,7 +57,6 @@ class Player:
         for player in players:
             if player.get("national_chess_id") == self:
                 return player
-
 
     def update_player(self):
         """met à jour un liste de players"""
