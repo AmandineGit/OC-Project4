@@ -36,14 +36,18 @@ class Round:
         json_round = JsonFile("rounds.json", [])
         rounds = JsonFile.read_json(json_round)
         open_round_exist = False
-        for round in rounds:
-            if (round.get("start_date") != "01/01/2000 12:00"
-                    and round.get("end_date") == "01/01/2000 12:00"):
-                open_round_exist = True
-                round_exist = round
-            else:
-                open_round_exist = False
-                round_exist = ""
+        if rounds is not False:
+            for round in rounds:
+                if (round.get("start_date") != "01/01/2000 12:00"
+                        and round.get("end_date") == "01/01/2000 12:00"):
+                    open_round_exist = True
+                    round_exist = round
+                else:
+                    open_round_exist = False
+                    round_exist = ""
+        else:
+            open_round_exist = False
+            round_exist = ""
         return [open_round_exist, round_exist]
 
     @staticmethod
@@ -51,7 +55,10 @@ class Round:
         """Recherche et renvoi le numéro du dernier round d'un tournoi"""
         json_rounds = JsonFile("rounds.json", [])
         rounds = JsonFile.read_json(json_rounds)
-        return rounds[-1]["name"]
+        if rounds is not False:
+            return rounds[-1]["name"]
+        else:
+            return "Round0"
 
     @staticmethod
     def prompt_close_round():

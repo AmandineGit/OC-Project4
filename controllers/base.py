@@ -162,16 +162,18 @@ class Controllers:
                     round_exist = Round.open_round_exist()
                 except FileNotFoundError:
                     round_exist = [False, None]
-
                 while round_exist[0] is True:
                     View.display_error_roundinprogress()
                     Controllers.main_menu()
                 round_name = Controllers.name_of_round()
                 current_tournament = (Tournament.current_tournament())
-
+                nb_players = len(current_tournament["registred_players_list"])
                 if current_tournament is None:
                     View.display_error_tournement_notinprogress()
                 else:
+                    while nb_players < 6:
+                        View.display_error_nb_players()
+                        Controllers.player_registration()
                     last_round_in_tournament = Tournament.last_number_of_round(current_tournament.get("name"))
                     current_tournament["rounds_list"].append(round_name)
                     round_number = round_name[5:]
@@ -471,29 +473,32 @@ class Controllers:
             elif choice == "y":
                 name_round = View.prompt_name_round()
                 matchs_list = Round.search_matchslist_round(name_round)
-                for match in matchs_list:
-                    if match[0][1] == 1.0:
-                        winning_player = match[0][0]
-                        winning_player = (Player.search_player_by_id(winning_player)["first_name"]
-                                          + " " + Player.search_player_by_id(winning_player)["last_name"])
-                        losing_player = match [1][0]
-                        losing_player = (Player.search_player_by_id(losing_player)["first_name"]
-                                         + " " + Player.search_player_by_id(losing_player)["last_name"])
-                        View.display_match_winner(winning_player, losing_player)
-                    elif match[0][1] == 0.0:
-                        losing_player = match[0][0]
-                        losing_player = (Player.search_player_by_id(losing_player)["first_name"]
-                                         + " " + Player.search_player_by_id(losing_player)["last_name"])
-                        winning_player = match [1][0]
-                        winning_player = (Player.search_player_by_id(winning_player)["first_name"]
-                                          + " " + Player.search_player_by_id(winning_player)["last_name"])
-                        View.display_match_winner(winning_player, losing_player)
-                    if match[0][1] == 0.5:
-                        player = match[0][0]
-                        player = (Player.search_player_by_id(player)["first_name"]
-                                  + " " + Player.search_player_by_id(player)["last_name"])
-                        player2 = match [1][0]
-                        player2 = (Player.search_player_by_id(player2)["first_name"]
-                                   + " " + Player.search_player_by_id(player2)["last_name"])
-                        View.display_match_equality(player, player2)
+                try:
+                    for match in matchs_list:
+                        if match[0][1] == 1.0:
+                            winning_player = match[0][0]
+                            winning_player = (Player.search_player_by_id(winning_player)["first_name"]
+                                              + " " + Player.search_player_by_id(winning_player)["last_name"])
+                            losing_player = match [1][0]
+                            losing_player = (Player.search_player_by_id(losing_player)["first_name"]
+                                             + " " + Player.search_player_by_id(losing_player)["last_name"])
+                            View.display_match_winner(winning_player, losing_player)
+                        elif match[0][1] == 0.0:
+                            losing_player = match[0][0]
+                            losing_player = (Player.search_player_by_id(losing_player)["first_name"]
+                                             + " " + Player.search_player_by_id(losing_player)["last_name"])
+                            winning_player = match [1][0]
+                            winning_player = (Player.search_player_by_id(winning_player)["first_name"]
+                                              + " " + Player.search_player_by_id(winning_player)["last_name"])
+                            View.display_match_winner(winning_player, losing_player)
+                        if match[0][1] == 0.5:
+                            player = match[0][0]
+                            player = (Player.search_player_by_id(player)["first_name"]
+                                      + " " + Player.search_player_by_id(player)["last_name"])
+                            player2 = match [1][0]
+                            player2 = (Player.search_player_by_id(player2)["first_name"]
+                                       + " " + Player.search_player_by_id(player2)["last_name"])
+                            View.display_match_equality(player, player2)
+                except TypeError:
+                    View.display_error_search_round()
                 continue

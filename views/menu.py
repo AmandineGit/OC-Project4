@@ -162,6 +162,11 @@ class View:
         print("Aucun round en cours, vous ne pouvez pas cloturer de round.\n")
 
     @staticmethod
+    def display_error_nb_players():
+        """Affiche un message indiquant qu'il n'y a pas assez de joeurs pour démarrer le tournoi"""
+        print("Il n'y a pas assez de joueurs inscrits sur ce tournoi.\n")
+
+    @staticmethod
     def display_error_choise():
         """Affiche un message indiquant une erreur sur le choix"""
         print("\nMerci de répondre par y pour yes ou n pour no")
@@ -227,6 +232,11 @@ class View:
     def display_match_equality(self, player2):
         print(self + " et " + player2
               + " ont fait match nul.")
+
+    @staticmethod
+    def display_error_search_round():
+        """Affiche un message d'erreur si le nom du round est érroné"""
+        print("Veuillez entrer le nom d'un round existant, en respectant les majuscules et minuscules.")
 
     def test_date(self):
         """Valide la saisie d'une date"""
