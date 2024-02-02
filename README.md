@@ -34,11 +34,8 @@ Les données de travail seront oragnisées dans des fichiers Json, enregistrés 
        `pyflakes==3.2.0`</br>
        `Pygments==2.17.2`</br>
 
-### Execution du script
+### Execution du programme
 
- - [ ] Lancer le script à partir du répertoire courant (racine du répertoire projet) via la commande :</br>
-       `(env) user@machine:~/repertoire_projet$ ./script.py`</br>
-### Validation & récupération des fichiers
- - [ ] Controler l'execution via l'affichage écran qui commente les différentes actions réalisées
- - [ ] Controler les fichiers de données et les images téléchargées.</br>
-        Le script va créer un répertoire par catégorie d'ouvrage, dans chaque répertoire se trouve un fichier CSV contenant les données extraites, ainsi qu'un sous répertoire nommé "images-catego-_categorie_".
+ - [ ] Accéder au répertoire projet et lancer le programme :</br>
+       `(env) user@machine:~/repertoire_projet$ python3 ./main.py`</br>
+
