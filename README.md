@@ -1,11 +1,11 @@
-# Documentation WebScraping pour exemple sur books.toscrape.com
+# Documentation ogramme développé pour le Projet 4
 :grinning: Fait par @AmandineGit le 2 fevrier 2024
 
 ## Utilisation du logiciel de geestion de tournois d'échecs
 Il s'agit d'un programme permettant la gestion de tournois d'échecs dans un contexte hors Internet.
 Ce programme vous permt de :
-+ <span style="color:orange"> Créer un tournoi ==> </span>
-+ <span style="color:orange"> Planifier un tournoi ==> </span>
++ <span style="color:orange"> Créer un tournoi </span>
++ <span style="color:orange"> Planifier un tournoi </span>
 + <span style="color:orange"> Inscrire des joueurs à un tournoi </span>
 + <span style="color:orange"> Lancer un round </span>
 + <span style="color:orange"> Clôturer un round </span>
