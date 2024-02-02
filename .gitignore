@@ -1,2 +1,4 @@
-#  Ignore l'environnement .env
-env
+#  Ignore l'environnement .env4
+env4
+# Ignore les rapports HTML
+*.html
