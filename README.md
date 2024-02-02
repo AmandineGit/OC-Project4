@@ -1,7 +1,7 @@
-# Documentation ogramme développé pour le Projet 4
+# Documentation du programme développé pour le Projet 4
 :grinning: Fait par @AmandineGit le 2 fevrier 2024
 
-## Utilisation du logiciel de geestion de tournois d'échecs
+## Utilisation du logiciel de gestion de tournois d'échecs
 Il s'agit d'un programme permettant la gestion de tournois d'échecs dans un contexte hors Internet.
 Ce programme vous permt de :
 + <span style="color:orange"> Créer un tournoi </span>
