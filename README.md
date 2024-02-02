@@ -1,1 +1,44 @@
-test d'initialisation du répertoire !
+# Documentation WebScraping pour exemple sur books.toscrape.com
+:grinning: Fait par @AmandineGit le 2 fevrier 2024
+
+## Utilisation du logiciel de geestion de tournois d'échecs
+Il s'agit d'un programme permettant la gestion de tournois d'échecs dans un contexte hors Internet.
+Ce programme vous permt de :
++ <span style="color:orange"> Créer un tournoi ==> </span>
++ <span style="color:orange"> Planifier un tournoi ==> </span>
++ <span style="color:orange"> Inscrire des joueurs à un tournoi </span>
++ <span style="color:orange"> Lancer un round </span>
++ <span style="color:orange"> Clôturer un round </span>
++ <span style="color:orange"> Afficher un rapport </span>
+
+Les données de travail seront oragnisées dans des fichiers Json, enregistrés dans le dossier datas. </br>
+
+### Création de l'environnement virtuel necéssaire pour l'execution
+- [ ] Créer un environnement virtuel nommé `env` grace à la commande : `>>> python3 -m venv env`
+- [ ] Activer l'environnment virtuel crée avec la commande : `>>> source env/bin/activate`
+- [ ] Vérifier, votre prompt doit afficher : <span style="color:green">(env)</span> `user@machine:~/repertoire_projet$`
+
+
+### Installation des paquets necéssaires 
+- [ ] Installer les paquets dans la version recommandée dans le requirement.txt grace à la commande pip : </br>
+     `(env) user@machine:~/repertoire_projet$ pip install paquet_a_installer==version`</br>
+- [ ] Vérifier l'installation des paquets grace à :</br>
+       ```(env) user@machine:~/repertoire_projet$ pip freeze```</br>
+        Le retour devrait correspondre à :</br>
+       `flake8==7.0.0`</br>
+       `flake8-html==0.4.3`</br>
+       `Jinja2==3.1.3`</br>
+       `MarkupSafe==2.1.4`</br>
+       `mccabe==0.7.0`</br>
+       `pycodestyle==2.11.1`</br>
+       `pyflakes==3.2.0`</br>
+       `Pygments==2.17.2`</br>
+
+### Execution du script
+
+ - [ ] Lancer le script à partir du répertoire courant (racine du répertoire projet) via la commande :</br>
+       `(env) user@machine:~/repertoire_projet$ ./script.py`</br>
+### Validation & récupération des fichiers
+ - [ ] Controler l'execution via l'affichage écran qui commente les différentes actions réalisées
+ - [ ] Controler les fichiers de données et les images téléchargées.</br>
+        Le script va créer un répertoire par catégorie d'ouvrage, dans chaque répertoire se trouve un fichier CSV contenant les données extraites, ainsi qu'un sous répertoire nommé "images-catego-_categorie_".
