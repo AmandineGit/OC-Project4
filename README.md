@@ -1,4 +1,4 @@
-# Documentation du programme développé pour le Projet 4
+# Documentation du logiciel de gestion de tournois d'échecs
 :grinning: Fait par @AmandineGit le 2 fevrier 2024
 
 ## Utilisation du logiciel de gestion de tournois d'échecs
