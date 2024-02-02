@@ -8,8 +8,13 @@ class Tournament:
     start_date = datetime.date
     end_date = datetime.date
 
-    def __init__(self, name, location, registred_players_list=None, number_of_round=4, description="",
-                 start_date="01/01/2000", rounds_list=None, current_round_number=0,
+    def __init__(self,
+                 name,
+                 location,
+                 registred_players_list=None,
+                 number_of_round=4, description="",
+                 start_date="01/01/2000",
+                 rounds_list=None, current_round_number=0,
                  end_date="01/01/2000", matchs_list=[]):
         self.name = name
         self.location = location

@@ -1,5 +1,4 @@
 """ Define menu"""
-from models.tournament import Tournament
 from datetime import datetime
 
 
@@ -25,21 +24,32 @@ class View:
 
     @staticmethod
     def prompt_create_tournament():
-        """Prompt pour créer un tournoi qui ensuite lance le prompt pour la création des players"""
+        """Prompt pour créer un tournoi qui ensuite
+        lance le prompt pour la création des players"""
         print("\n===> Création du Tournoi")
-        tournament_location = input("\nVeuillez indiquer le lieu du tournoi : ")
-        tournament_name = input("Veuillez indiquer le nom du tournoi : ")
-        tournament_description = input("Vous pouvez ajouter une description : ")
+        tournament_location \
+            = input("\nVeuillez indiquer le lieu du tournoi : ")
+        tournament_name \
+            = input("Veuillez indiquer le nom du tournoi : ")
+        tournament_description \
+            = input("Vous pouvez ajouter une description : ")
         return tournament_name, tournament_location, tournament_description
 
     @staticmethod
     def prompt_open_tournament():
-        """Prompt pour selectionner le tournoi et receuillir la date de début d'ouverture """
-        tournament_name = input("Veuillez entrer le nom du tournoi \n(taper x pour revnir au menu principal) :")
+        """Prompt pour selectionner le tournoi
+        et receuillir la date de début d'ouverture """
+        tournament_name\
+            = input("Veuillez entrer le nom du tournoi"
+                    " \n(taper x pour revnir au menu principal) :")
         if tournament_name == "x":
             return tournament_name
         if tournament_name != "x":
-            open_date_tournament = View.test_date(input("Veuillez entrer la date de début du tournoi : "))
+            open_date_tournament = (
+                View.test_date(
+                    input("Veuillez entrer la date de début du tournoi : ")
+                )
+            )
             datas_open_tournament = [tournament_name, open_date_tournament]
             return datas_open_tournament
 
@@ -55,8 +65,9 @@ class View:
         print("\nEnregistrement des joueurs")
         first_name = input("\nVeuillez indiquer le prénom du joueur : ")
         last_name = input("Veuillez indiquer le nom du joueur : ")
-        date_of_birth = View.test_date(input
-                                       ("Veuillez indiquer la date de naissance du joueur sous le format jj/mm/yy : "))
+        date_of_birth = (View.test_date
+                         (input("Veuillez indiquer la date de naissance "
+                                "du joueur sous le format jj/mm/yy : ")))
         return first_name, last_name, date_of_birth
 
     @staticmethod
@@ -79,9 +90,13 @@ class View:
             print("Entrer le résultat du match pour chaque joueur :\n")
             return
         elif self == 2:
-            print("* Match opposant " + name_player1["first_name"] + " " + name_player1["last_name"] + " et "
-                  + name_player2["first_name"] + " " + name_player2["last_name"])
-            score = input("Score réalisé par " + name_player1["first_name"] + " " + name_player1["last_name"] + " : ")
+            print("* Match opposant " + name_player1["first_name"]
+                  + " " + name_player1["last_name"] + " et "
+                  + name_player2["first_name"] + " "
+                  + name_player2["last_name"])
+            score = input("Score réalisé par "
+                          + name_player1["first_name"]
+                          + " " + name_player1["last_name"] + " : ")
             return score
 
     @staticmethod
@@ -92,23 +107,28 @@ class View:
 
     def prompt_search_players_tournament(self):
         """Prompt pour demander s'il faut effectuer l'affichage des joueurs """
-        choice = input("\nVoulez-vous afficher la liste des joueurs du tournoi " + self["name"] + " ? (y/n)\n")
+        choice = input("\nVoulez-vous afficher la liste des joueurs du tournoi"
+                       + self["name"] + " ? (y/n)\n")
         return choice
 
     def prompt_search_rounds_tournament(self):
         """Prompt pour demander s'il faut effectuer l'affichage des rounds """
-        choice = input("\nVoulez-vous afficher la liste des rounds du tournoi " + self["name"] + " ? (y/n)\n")
+        choice = input("\nVoulez-vous afficher la liste des rounds du tournoi "
+                       + self["name"] + " ? (y/n)\n")
         return choice
 
     def prompt_search_matchs_tournament(self):
-        """Prompt pour demander s'il faut effectuer l'affichage des matchs d'un round """
-        choice = input("\nVoulez-vous afficher la liste des matchs d'un round du tournoi "
+        """Prompt pour demander s'il faut effectuer
+        l'affichage des matchs d'un round """
+        choice = input("\nVoulez-vous afficher "
+                       "la liste des matchs d'un round du tournoi "
                        + self["name"] + " ? (y/n)\n")
         return choice
 
     @staticmethod
     def prompt_name_round():
-        """Prompt pour demander le nom d'un round du tournoi et renvoi le nom"""
+        """Prompt pour demander le nom d'un round
+        du tournoi et renvoi le nom"""
         round_name = input("\nEntrer le nom du round :\n")
         return round_name
 
@@ -122,7 +142,8 @@ class View:
 
     def display_create_player(self, last_name):
         """Affiche un message confirmant l'inscription du player"""
-        print("===> Le joueur " + self + " " + last_name + " est enregistré dans la base de joueurs.")
+        print("===> Le joueur " + self + " "
+              + last_name + " est enregistré dans la base de joueurs.")
 
     def display_error_tournament(self):
         """Affiche un message indiquant que le tournoi n'existe pas"""
@@ -144,26 +165,31 @@ class View:
     @staticmethod
     def display_error_tournamentinprogress():
         """Affiche un message indiquant qu'un tournoi est deja en cours"""
-        print("Un tournoi est déjà en cours, vous ne pouvez pas en ouvrir un second.\n")
+        print("Un tournoi est déjà en cours, "
+              "vous ne pouvez pas en ouvrir un second.\n")
 
     @staticmethod
     def display_error_tournament_already_closed():
         """Affiche un message indiquant qu'un tournoi est deja en cours"""
-        print("Le tournoi est déjà clos, vous ne pouvez pas l'ouvrir une seconde fois.\n")
+        print("Le tournoi est déjà clos, "
+              "vous ne pouvez pas l'ouvrir une seconde fois.\n")
 
     @staticmethod
     def display_error_roundinprogress():
         """Affiche un message indiquant qu'un round est deja en cours"""
-        print("Un round est déjà en cours, vous ne pouvez pas en ouvrir un second.\n")
+        print("Un round est déjà en cours,"
+              " vous ne pouvez pas en ouvrir un second.\n")
 
     @staticmethod
     def display_error_roundnotinprogress():
         """Affiche un message indiquant qu'il n'y a aucun round en cours"""
-        print("Aucun round en cours, vous ne pouvez pas cloturer de round.\n")
+        print("Aucun round en cours,"
+              " vous ne pouvez pas cloturer de round.\n")
 
     @staticmethod
     def display_error_nb_players():
-        """Affiche un message indiquant qu'il n'y a pas assez de joeurs pour démarrer le tournoi"""
+        """Affiche un message indiquant qu'il n'y a pas assez
+         de joeurs pour démarrer le tournoi"""
         print("Il n'y a pas assez de joueurs inscrits sur ce tournoi.\n")
 
     @staticmethod
@@ -179,7 +205,8 @@ class View:
     @staticmethod
     def display_error_tournement_notinprogress():
         """Affiche un message indiquant qu'il n'y a pas de tourno en cours"""
-        print("\nIl n'y a pas de tournoi en cours.\nVeuillez ouvrir un tournoi pour lancer un round.\n")
+        print("\nIl n'y a pas de tournoi en cours."
+              "\nVeuillez ouvrir un tournoi pour lancer un round.\n")
 
     def display_lauch_round(self):
         print("==> Le round " + self + " est lancé.\n")
@@ -191,31 +218,49 @@ class View:
         print("==> Le tournoi " + self + " est cloturé.\n")
 
     def display_win_player(self):
-        print(self["first_name"] + " " + self["last_name"] + " a gagné le match.\n")
+        """Affiche les résutats d'un match"""
+        print(self["first_name"] + " "
+              + self["last_name"] + " a gagné le match.\n")
 
     def display_equality_player(self, player_win2):
-        print(self["first_name"] + " " + self["last_name"] + " " + player_win2["first_name"]
-              + " " + player_win2["last_name"] + " ont fait match nul.\n")
+        """Affiche les résutats d'un match"""
+        print(self["first_name"] + " "
+              + self["last_name"] + " "
+              + player_win2["first_name"]
+              + " " + player_win2["last_name"]
+              + " ont fait match nul.\n")
 
     @staticmethod
     def display_error_score():
+        """message d erreur de saisie"""
         print("Score incorrect.")
 
     @staticmethod
     def display_create_report():
-        print("\nVotre rapport a été crée, il se trouve dans le dossier racine au format html.")
+        print("\nVotre rapport a été crée,"
+              " il se trouve dans le dossier racine au format html.")
 
     def display_result_search_tournement(self):
+        """affiche les dates d'un tournoi"""
         if self["end_date"] == "01/01/2000":
             if self["start_date"] == "01/01/2000":
-                print("Le tournoi " + self["name"] + " n'est pas encore planifié.")
+                print("Le tournoi "
+                      + self["name"]
+                      + " n'est pas encore planifié.")
                 return 0
             else:
-                print("Le " + self["name"] + " est prévue le " + self["start_date"])
+                print("Le "
+                      + self["name"] +
+                      " est prévue le "
+                      + self["start_date"])
                 return 1
         else:
-            print("Le " + self["name"] + " a démarré le " + self["start_date"] +
-                  " et s'est terminé le " + self["end_date"])
+            print("Le "
+                  + self["name"] +
+                  " a démarré le "
+                  + self["start_date"] +
+                  " et s'est terminé le "
+                  + self["end_date"])
             return 2
 
     def display_players_tournement(self):
@@ -236,7 +281,8 @@ class View:
     @staticmethod
     def display_error_search_round():
         """Affiche un message d'erreur si le nom du round est érroné"""
-        print("Veuillez entrer le nom d'un round existant, en respectant les majuscules et minuscules.")
+        print("Veuillez entrer le nom d'un round existant,"
+              " en respectant les majuscules et minuscules.")
 
     def test_date(self):
         """Valide la saisie d'une date"""
@@ -248,7 +294,8 @@ class View:
                 test = True
             except ValueError:
                 print("Format de date incorrect. Veuillez réessayer.")
-                date_str = input("Veuillez indiquer une date sous le format jj/mm/yy : ")
+                date_str = input("Veuillez indiquer une date"
+                                 " sous le format jj/mm/yy : ")
         return date_str
 
     @staticmethod

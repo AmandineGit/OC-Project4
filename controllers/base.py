@@ -42,7 +42,8 @@ class Controllers:
     def create_tournament():
         """Création d'un tournoi"""
         name, location, description = View.prompt_create_tournament()
-        tournament_exist = Tournament.record_tournament(name, location, description=description)
+        tournament_exist = (Tournament.record_tournament
+                            (name, location, description=description))
         if tournament_exist is False:
             View.display_create_tournament(name)
         elif tournament_exist is True:
@@ -61,7 +62,8 @@ class Controllers:
             else:
                 open_date = str(datas_open_tournament[1])
                 tournament_name = (datas_open_tournament[0])
-                search_tournement = Tournament.search_tournament(tournament_name)
+                search_tournement = (Tournament.search_tournament
+                                     (tournament_name))
                 if search_tournement[0] is True:
                     json_tournament = JsonFile("tournaments.json", [])
                     tournaments = JsonFile.read_json(json_tournament)
@@ -69,7 +71,8 @@ class Controllers:
                         if tournament.get("name") == datas_open_tournament[0]:
                             tournament["start_date"] = datas_open_tournament[1]
                             Tournament.update_tournament(tournament)
-                            View.display_open_tournament(tournament_name, open_date)
+                            (View.display_open_tournament
+                             (tournament_name, open_date))
                             Controllers.player_registration()
                 elif search_tournement[0] == "already_closed":
                     View.display_error_tournament_already_closed()
@@ -94,12 +97,15 @@ class Controllers:
                 datas_player = datas
                 player_id_exist = Player.search_player(datas_player)
                 if player_id_exist is not False:
-                    """si le player existe déjà il est inscrit directement au tournoi"""
+                    """si le player existe déjà il est inscrit
+                    directement au tournoi"""
                     Controllers.registrer_player_tournament(player_id_exist)
                 else:
-                    """si le player n'existe pas il est crée dans players.json puis inscrit au tournoi"""
+                    """si le player n'existe pas il est crée dans
+                    players.json puis inscrit au tournoi"""
                     national_chess_id = Controllers.create_player(datas_player)
-                    View.display_create_player(datas_player[0], datas_player[1])
+                    (View.display_create_player
+                     (datas_player[0], datas_player[1]))
                     Controllers.registrer_player_tournament(national_chess_id)
             continue
 
@@ -108,19 +114,24 @@ class Controllers:
         alors il est également enregistré dans le fichier players.json"""
         national_chess_id = Player.create_national_chess_id()
         first_name, last_name, date_of_birth = self
-        player = Player(first_name, last_name, date_of_birth, national_chess_id)
+        player = Player(first_name,
+                        last_name,
+                        date_of_birth,
+                        national_chess_id)
         Player.record_player(player, "players.json")
         return national_chess_id
 
     def registrer_player_tournament(self):
         """Ajouter un player dans un tournoi
         Rechercher le tournoi en cours
-        Ajouter le player dans la liste de players du tournoi grace à la methode update_tournament"""
+        Ajouter le player dans la liste de players
+        du tournoi grace à la methode update_tournament"""
         while True:
             tournament_name = View.prompt_choice_tournament()
             tournament_exist = Tournament.search_tournament(tournament_name)
             if tournament_exist is False:
-                """si le tournoi saisie n'existe pas, le user est invité à saisir à nouveau"""
+                """si le tournoi saisie n'existe pas,
+                le user est invité à saisir à nouveau"""
                 View.display_error_tournament(tournament_name)
                 continue
             else:
@@ -135,7 +146,8 @@ class Controllers:
                     tournament["registred_players_list"] = players_list
                     for tournamentnew in tournaments:
                         if tournamentnew.get("name") == tournament["name"]:
-                            tournamentnew["registred_players_list"] = tournament["registred_players_list"]
+                            tournamentnew["registred_players_list"]\
+                                = tournament["registred_players_list"]
                             Tournament.update_tournament(tournamentnew)
                     View.display_register_player(tournament_name)
                     return
@@ -174,12 +186,16 @@ class Controllers:
                     while nb_players < 6:
                         View.display_error_nb_players()
                         Controllers.player_registration()
-                    last_round_in_tournament = Tournament.last_number_of_round(current_tournament.get("name"))
+                    last_round_in_tournament\
+                        = (Tournament.last_number_of_round
+                           (current_tournament.get("name")))
                     current_tournament["rounds_list"].append(round_name)
                     round_number = round_name[5:]
                     round_number = int(round_number)
                     current_tournament["current_round_number"] = round_number
-                    matchs_list = Controllers.create_pairs(current_tournament, last_round_in_tournament)
+                    matchs_list = (Controllers.create_pairs
+                                   (current_tournament,
+                                    last_round_in_tournament))
                     current_matchs_list = current_tournament["matchs_list"]
                     for match in matchs_list:
                         current_matchs_list.append(match)
@@ -211,25 +227,31 @@ class Controllers:
         current_tournament = Tournament.current_tournament()
         tournament_matchs_list = current_tournament["matchs_list"]
         if last_round_in_tournament == 0:
-            """lancer la premièrer initialisation, mélange aléatoire des joueurs"""
+            """lancer la premièrer initialisation,
+             mélange aléatoire des joueurs"""
             random.shuffle(registred_players_list)
             for i in range(0, len(registred_players_list), 2):
-                pairs = [registred_players_list[i], registred_players_list[i + 1]]
+                pairs = [registred_players_list[i],
+                         registred_players_list[i + 1]]
                 matchs_list.append(pairs)
                 pairs_inv = [pairs[1], pairs[0]]
                 tournament_matchs_list.append(pairs_inv)
                 tournament_matchs_list.append(pairs)
         else:
-            """Créer la liste des matchs en triant les players 
+            """Créer la liste des matchs en triant les players
             en fonction de leur score total en évitant les doublons"""
-            sort_registred_players_list = Controllers.sort_players(registred_players_list)
-            sort_registred_players_list = [couple[0] for couple in sort_registred_players_list]
+            sort_registred_players_list \
+                = Controllers.sort_players(registred_players_list)
+            sort_registred_players_list \
+                = [couple[0] for couple in sort_registred_players_list]
             while len(sort_registred_players_list) >= 2:
                 j = 2
-                pairs = [sort_registred_players_list[0], sort_registred_players_list[1]]
+                pairs = [sort_registred_players_list[0],
+                         sort_registred_players_list[1]]
                 if len(sort_registred_players_list) >= 3:
                     while pairs in tournament_matchs_list:
-                        pairs = [sort_registred_players_list[0], sort_registred_players_list[j]]
+                        pairs = [sort_registred_players_list[0],
+                                 sort_registred_players_list[j]]
                         if j < len(sort_registred_players_list):
                             j += 1
                         else:
@@ -246,12 +268,16 @@ class Controllers:
         return matchs_list
 
     def sort_players(self):
-        """Tri une liste de joeurs en fonction de leur score et renvoi la liste triée avec les scores"""
+        """Tri une liste de joeurs en fonction de leur score
+        et renvoi la liste triée avec les scores"""
         registred_players_list = []
         for player in self:
             datas_player = Player.search_player_by_id(player)
-            registred_players_list.append([datas_player["national_chess_id"], datas_player["total_score"]])
-        sort_registred_players_list = sorted(registred_players_list, key=lambda x: x[1])
+            registred_players_list.append([
+                datas_player["national_chess_id"],
+                datas_player["total_score"]])
+        sort_registred_players_list \
+            = sorted(registred_players_list, key=lambda x: x[1])
         return sort_registred_players_list
 
     @staticmethod
@@ -332,9 +358,11 @@ class Controllers:
                 player, score = player_score
                 player_object = Player.search_player_by_id(player)
                 if score == 1:
-                    player_object["total_score"] = player_object["total_score"] + 1
+                    player_object["total_score"] \
+                        = player_object["total_score"] + 1
                 elif score == 0.5:
-                    player_object["total_score"] = player_object["total_score"] + 0.5
+                    player_object["total_score"] \
+                        = player_object["total_score"] + 0.5
                 update_list_players.append(player_object)
         Player.update_player(update_list_players)
 
@@ -380,10 +408,15 @@ class Controllers:
         print("\n Liste des joueurs enregistrés :\n")
         json_player = JsonFile("players.json", [])
         players = JsonFile.read_json(json_player)
-        sorted_players = sorted(players, key=lambda player: player["last_name"].lower())
-        players_report = "RAPPORT : liste des joueurs enregistrés.<br><br><table border='1'>"
-        sorted_players.insert(0, {"first_name": "Prénom", "last_name": "Nom",
-                                  "date_of_birth": "Date de naissance", "national_chess_id": "ID",
+        sorted_players = sorted(players,
+                                key=lambda player:
+                                player["last_name"].lower())
+        players_report = ("RAPPORT : liste des joueurs enregistrés."
+                          "<br><br><table border='1'>")
+        sorted_players.insert(0, {"first_name": "Prénom",
+                                  "last_name": "Nom",
+                                  "date_of_birth": "Date de naissance",
+                                  "national_chess_id": "ID",
                                   "total_score": "Score total"})
         for player in sorted_players:
             print(player["last_name"] + " " + player["first_name"])
@@ -407,7 +440,8 @@ class Controllers:
             for cle in list(tournament.keys()):
                 if cle != "name" and cle != "location":
                     tournament.pop(cle)
-        tournaments_report = "RAPPORT : liste des tournois enregistrés.<br><br><table border='1'>"
+        tournaments_report = ("RAPPORT : liste des tournois "
+                              "enregistrés.<br><br><table border='1'>")
         tournaments.insert(0, {"name": "Nom du tournoi", "location": "Lieu"})
         for tournament in tournaments:
             if tournament["name"] != "Nom du tournoi":
@@ -425,7 +459,8 @@ class Controllers:
     def display_datas_tournament():
         """Affiche les infos d'un tournoi, dates, joueurs, rounds, matchs"""
         name_tournament = View.prompt_search_tournament()
-        return_search_tournament = Tournament.search_tournament(name_tournament)
+        return_search_tournament \
+            = Tournament.search_tournament(name_tournament)
         if return_search_tournament is False:
             View.display_error_tournament(name_tournament)
             Controllers.reports_submenu()
@@ -445,7 +480,8 @@ class Controllers:
             elif choice == "y":
                 for player in tournament["registred_players_list"]:
                     object_player = Player.search_player_by_id(player)
-                    name_player = [object_player["last_name"], object_player["first_name"]]
+                    name_player = [object_player["last_name"],
+                                   object_player["first_name"]]
                     View.display_players_tournement(name_player)
                 break
 
@@ -477,27 +513,43 @@ class Controllers:
                     for match in matchs_list:
                         if match[0][1] == 1.0:
                             winning_player = match[0][0]
-                            winning_player = (Player.search_player_by_id(winning_player)["first_name"]
-                                              + " " + Player.search_player_by_id(winning_player)["last_name"])
+                            winning_player = \
+                                (Player.search_player_by_id
+                                 (winning_player)["first_name"]
+                                 + " " + Player.search_player_by_id
+                                 (winning_player)["last_name"])
                             losing_player = match [1][0]
-                            losing_player = (Player.search_player_by_id(losing_player)["first_name"]
-                                             + " " + Player.search_player_by_id(losing_player)["last_name"])
-                            View.display_match_winner(winning_player, losing_player)
+                            losing_player = (Player.search_player_by_id
+                                             (losing_player)["first_name"]
+                                             + " " + Player.search_player_by_id
+                                             (losing_player)["last_name"])
+                            View.display_match_winner(winning_player,
+                                                      losing_player)
                         elif match[0][1] == 0.0:
                             losing_player = match[0][0]
-                            losing_player = (Player.search_player_by_id(losing_player)["first_name"]
-                                             + " " + Player.search_player_by_id(losing_player)["last_name"])
+                            losing_player = (Player.search_player_by_id
+                                             (losing_player)["first_name"]
+                                             + " " + Player.search_player_by_id
+                                             (losing_player)["last_name"])
                             winning_player = match [1][0]
-                            winning_player = (Player.search_player_by_id(winning_player)["first_name"]
-                                              + " " + Player.search_player_by_id(winning_player)["last_name"])
-                            View.display_match_winner(winning_player, losing_player)
+                            winning_player = (Player.search_player_by_id
+                                              (winning_player)["first_name"]
+                                              + " " +
+                                              Player.search_player_by_id
+                                              (winning_player)["last_name"])
+                            View.display_match_winner(winning_player,
+                                                      losing_player)
                         if match[0][1] == 0.5:
                             player = match[0][0]
-                            player = (Player.search_player_by_id(player)["first_name"]
-                                      + " " + Player.search_player_by_id(player)["last_name"])
+                            player = (Player.search_player_by_id
+                                      (player)["first_name"]
+                                      + " " + Player.search_player_by_id
+                                      (player)["last_name"])
                             player2 = match [1][0]
-                            player2 = (Player.search_player_by_id(player2)["first_name"]
-                                       + " " + Player.search_player_by_id(player2)["last_name"])
+                            player2 = (Player.search_player_by_id
+                                       (player2)["first_name"]
+                                       + " " + Player.search_player_by_id
+                                       (player2)["last_name"])
                             View.display_match_equality(player, player2)
                 except TypeError:
                     View.display_error_search_round()

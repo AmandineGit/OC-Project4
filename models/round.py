@@ -32,7 +32,8 @@ class Round:
 
     @staticmethod
     def open_round_exist():
-        """recherche et renvoi un booleen et le nom round en cours ou un str vide"""
+        """recherche et renvoi un booleen et
+        le nom round en cours ou un str vide"""
         json_round = JsonFile("rounds.json", [])
         rounds = JsonFile.read_json(json_round)
         open_round_exist = False

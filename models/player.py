@@ -7,7 +7,12 @@ class Player:
     """ Création de la classe Player pour les players """
     date_of_birth = datetime.date
 
-    def __init__(self, first_name, last_name, date_of_birth, national_chess_id=0, total_score=0):
+    def __init__(self,
+                 first_name,
+                 last_name,
+                 date_of_birth,
+                 national_chess_id=0,
+                 total_score=0):
         self.first_name = first_name
         self.last_name = last_name
         self.date_of_birth = date_of_birth
@@ -19,7 +24,8 @@ class Player:
         return self.first_name + " " + self.last_name
 
     def record_player(self, name_file):
-        """ enregistrement de l objet de type Player et relance la demande d'inscription pour un autre player"""
+        """ enregistrement de l objet de type Player et
+        relance la demande d'inscription pour un autre player"""
         json_file = self.__dict__
         json_player = JsonFile(name_file, json_file)
         JsonFile.append_json(json_player)
@@ -50,7 +56,8 @@ class Player:
         return next_national_chess_id
 
     def search_player_by_id(self):
-        """recherche un player par son ID et renvoi son l'object sous forme de dictionnaire,
+        """recherche un player par son ID et
+        renvoi son l'object sous forme de dictionnaire,
         s'il n'existe pas il renvoie None"""
         json_player = JsonFile("players.json", [])
         players = JsonFile.read_json(json_player)
@@ -65,7 +72,8 @@ class Player:
         index = -7
         for new_player in self:
             for i, player in enumerate(players_list):
-                if player.get("national_chess_id") == new_player["national_chess_id"]:
+                if (player.get("national_chess_id")
+                        == new_player["national_chess_id"]):
                     index = i
             if index != -1:
                 players_list[index] = new_player
