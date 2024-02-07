@@ -85,11 +85,12 @@ class View:
         lauch = input("Voulez-vous cloturer le round en cours ? y/n ")
         return lauch
 
-    def prompt_score_matchs(self, name_player1=None, name_player2=None):
-        if self == 1:
+    @staticmethod
+    def prompt_score_matchs(action, name_player1=None, name_player2=None):
+        if action == 1:
             print("Entrer le résultat du match pour chaque joueur :\n")
             return
-        elif self == 2:
+        elif action == 2:
             print("* Match opposant " + name_player1["first_name"]
                   + " " + name_player1["last_name"] + " et "
                   + name_player2["first_name"] + " "
@@ -105,24 +106,27 @@ class View:
         tournament_name = input("Veuillez entrer le nom du tournoi :\n")
         return tournament_name
 
-    def prompt_search_players_tournament(self):
+    @staticmethod
+    def prompt_search_players_tournament(tournament):
         """Prompt pour demander s'il faut effectuer l'affichage des joueurs """
         choice = input("\nVoulez-vous afficher la liste des joueurs du tournoi"
-                       + self["name"] + " ? (y/n)\n")
+                       + tournament["name"] + " ? (y/n)\n")
         return choice
 
-    def prompt_search_rounds_tournament(self):
+    @staticmethod
+    def prompt_search_rounds_tournament(tournament):
         """Prompt pour demander s'il faut effectuer l'affichage des rounds """
         choice = input("\nVoulez-vous afficher la liste des rounds du tournoi "
-                       + self["name"] + " ? (y/n)\n")
+                       + tournament["name"] + " ? (y/n)\n")
         return choice
 
-    def prompt_search_matchs_tournament(self):
+    @staticmethod
+    def prompt_search_matchs_tournament(tournament):
         """Prompt pour demander s'il faut effectuer
         l'affichage des matchs d'un round """
         choice = input("\nVoulez-vous afficher "
                        "la liste des matchs d'un round du tournoi "
-                       + self["name"] + " ? (y/n)\n")
+                       + tournament["name"] + " ? (y/n)\n")
         return choice
 
     @staticmethod
@@ -132,35 +136,41 @@ class View:
         round_name = input("\nEntrer le nom du round :\n")
         return round_name
 
-    def display_register_player(self):
+    @staticmethod
+    def display_register_player(tournament):
         """Affiche un message confirmant l'inscription du player"""
-        print("===> Le joueur est inscrit au tournoi " + self + ".\n")
+        print("===> Le joueur est inscrit au tournoi " + tournament + ".\n")
 
-    def display_create_tournament(self):
+    @staticmethod
+    def display_create_tournament(tournament):
         """Affiche un message confirmant la création du tournoi"""
-        print("\n===> Le tournoi '" + self + "' est enregistré")
+        print("\n===> Le tournoi '" + tournament + "' est enregistré")
 
-    def display_create_player(self, last_name):
+    @staticmethod
+    def display_create_player(first_name, last_name):
         """Affiche un message confirmant l'inscription du player"""
-        print("===> Le joueur " + self + " "
+        print("===> Le joueur " + first_name + " "
               + last_name + " est enregistré dans la base de joueurs.")
 
-    def display_error_tournament(self):
+    @staticmethod
+    def display_error_tournament(tournament):
         """Affiche un message indiquant que le tournoi n'existe pas"""
-        print("Le tournoi " + self + " n'existe pas.")
+        print("Le tournoi " + tournament + " n'existe pas.")
 
-    def display_open_tournament(self, start_date):
+    @staticmethod
+    def display_open_tournament(tournament, start_date):
         """Affiche un message confirmant l'ouverture du tournoi"""
-        print('le tournoi "' + self + '" est ouvert.')
+        print('le tournoi "' + tournament + '" est ouvert.')
 
     @staticmethod
     def display_error_menu():
         """Affiche un message indiquant une erreur sur le choix du sous menu"""
         print("Veuillez saisir un numéro existant.")
 
-    def display_tournament_already_exist(self):
+    @staticmethod
+    def display_tournament_already_exist(tournament):
         """Affiche un message d'erreur car le tournoi existe déjà"""
-        print('le tournoi "' + self + '" existe déjà.\n')
+        print('le tournoi "' + tournament + '" existe déjà.\n')
 
     @staticmethod
     def display_error_tournamentinprogress():
@@ -208,24 +218,29 @@ class View:
         print("\nIl n'y a pas de tournoi en cours."
               "\nVeuillez ouvrir un tournoi pour lancer un round.\n")
 
-    def display_lauch_round(self):
-        print("==> Le round " + self + " est lancé.\n")
+    @staticmethod
+    def display_lauch_round(round_name):
+        print("==> Le round " + round_name + " est lancé.\n")
 
-    def display_close_round(self):
-        print("==> Le round " + self + " est cloturé.\n")
+    @staticmethod
+    def display_close_round(round_name):
+        print("==> Le round " + round_name + " est cloturé.\n")
 
-    def display_close_tournament(self):
-        print("==> Le tournoi " + self + " est cloturé.\n")
+    @staticmethod
+    def display_close_tournament(tournament):
+        print("==> Le tournoi " + tournament + " est cloturé.\n")
 
-    def display_win_player(self):
+    @staticmethod
+    def display_win_player(player_win):
         """Affiche les résutats d'un match"""
-        print(self["first_name"] + " "
-              + self["last_name"] + " a gagné le match.\n")
+        print(player_win["first_name"] + " "
+              + player_win["last_name"] + " a gagné le match.\n")
 
-    def display_equality_player(self, player_win2):
+    @staticmethod
+    def display_equality_player(player_win, player_win2):
         """Affiche les résutats d'un match"""
-        print(self["first_name"] + " "
-              + self["last_name"] + " "
+        print(player_win["first_name"] + " "
+              + player_win["last_name"] + " "
               + player_win2["first_name"]
               + " " + player_win2["last_name"]
               + " ont fait match nul.\n")
@@ -240,42 +255,47 @@ class View:
         print("\nVotre rapport a été crée,"
               " il se trouve dans le dossier racine au format html.")
 
-    def display_result_search_tournement(self):
+    @staticmethod
+    def display_result_search_tournement(tournament):
         """affiche les dates d'un tournoi"""
-        if self["end_date"] == "01/01/2000":
-            if self["start_date"] == "01/01/2000":
+        if tournament["end_date"] == "01/01/2000":
+            if tournament["start_date"] == "01/01/2000":
                 print("Le tournoi "
-                      + self["name"]
+                      + tournament["name"]
                       + " n'est pas encore planifié.")
                 return 0
             else:
                 print("Le "
-                      + self["name"] +
+                      + tournament["name"] +
                       " est prévue le "
-                      + self["start_date"])
+                      + tournament["start_date"])
                 return 1
         else:
             print("Le "
-                  + self["name"] +
+                  + tournament["name"] +
                   " a démarré le "
-                  + self["start_date"] +
+                  + tournament["start_date"] +
                   " et s'est terminé le "
-                  + self["end_date"])
+                  + tournament["end_date"])
             return 2
 
-    def display_players_tournement(self):
+    @staticmethod
+    def display_players_tournement(name_player):
         """Affiche le nom complet d'un joueur"""
-        print(self[0] + " " + self[1])
+        print(name_player[0] + " " + name_player[1])
 
-    def display_rounds_tournement(self):
+    @staticmethod
+    def display_rounds_tournement(round):
         """Affiche le nom complet d'un joueur"""
-        print(self)
+        print(round)
 
-    def display_match_winner(self, losing_player):
-        print(self + " a reporté le match contre " + losing_player)
+    @staticmethod
+    def display_match_winner(win_player, losing_player):
+        print(win_player + " a reporté le match contre " + losing_player)
 
-    def display_match_equality(self, player2):
-        print(self + " et " + player2
+    @staticmethod
+    def display_match_equality(player1, player2):
+        print(player1 + " et " + player2
               + " ont fait match nul.")
 
     @staticmethod
@@ -284,9 +304,9 @@ class View:
         print("Veuillez entrer le nom d'un round existant,"
               " en respectant les majuscules et minuscules.")
 
-    def test_date(self):
+    @staticmethod
+    def test_date(date_str):
         """Valide la saisie d'une date"""
-        date_str = self
         test = False
         while test is False:
             try:

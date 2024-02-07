@@ -21,9 +21,10 @@ class Round:
         """ représentation de l objet de type Round """
         return self.name
 
-    def record_round(self, start_date, matchs_list):
+    @staticmethod
+    def record_round(round_name, start_date, matchs_list):
         """création d'un round  """
-        round = Round(self, start_date, matchs_list)
+        round = Round(round_name, start_date, matchs_list)
         json_file = round.__dict__
         json_round = JsonFile("rounds.json", json_file)
         JsonFile.append_json(json_round)
@@ -33,7 +34,7 @@ class Round:
     @staticmethod
     def open_round_exist():
         """recherche et renvoi un booleen et
-        le nom round en cours ou un str vide"""
+        le dict du round en cours ou un str vide"""
         json_round = JsonFile("rounds.json", [])
         rounds = JsonFile.read_json(json_round)
         open_round_exist = False
@@ -66,37 +67,28 @@ class Round:
         lauch = input("Voulez-vous cloturer le round en cours ? y/n ")
         return lauch
 
-    def search_matchslist_round(self):
+    @staticmethod
+    def search_matchslist_round(name_round):
         """Renvoi la list des matchs d'un round à partir de son nom"""
         json_rounds = JsonFile("rounds.json", [])
         rounds = JsonFile.read_json(json_rounds)
         for round in rounds:
-            if round.get("name") == self:
+            if round.get("name") == name_round:
                 return round.get("matchs_list")
 
-    def update_round(self):
-        """non utilise :
-        Mise à jour du round dans le json, à utiliser
-        avec un object round complet pour avoir toutes les données du round"""
+    @staticmethod
+    def update_round(current_round):
+        """Mise à jour du round dans le json, à utiliser
+        avec un object round complet pour avoir toutes
+        les données du round"""
         json_round = JsonFile("rounds.json", [])
         rounds_list = JsonFile.read_json(json_round)
         index = -7
         for i, round in enumerate(rounds_list):
-            if round.get("name") == self["name"]:
+            if round.get("name") == current_round["name"]:
                 index = i
         if index != -1:
-            rounds_list[index] = self
+            rounds_list[index] = current_round
         json_round.datas_json = rounds_list
         JsonFile.create_json(json_round)
         print("\n==> Le fichier " + "rounds.json" + " a été mis à jour")
-
-    def search_round(self):
-        """recherche et renvoi un booleen et le round ou None"""
-        json_round = JsonFile("rounds.json", [])
-        rounds = JsonFile.read_json(json_round)
-        for round in rounds:
-            if round.get("name") == self:
-                round_exist = True
-            else:
-                round_exist = False
-        return [round_exist, round]

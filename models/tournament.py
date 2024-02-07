@@ -34,11 +34,12 @@ class Tournament:
         """ représentation de l objet de type Tournament"""
         return self.name
 
-    def record_tournament(self, location, description):
+    @staticmethod
+    def record_tournament(name, location, description):
         """création d'un tournoi et  test d'existance préalable """
-        tournament_exist = Tournament.search_tournament(self)
+        tournament_exist = Tournament.search_tournament(name)
         if tournament_exist is False:
-            tournament = Tournament(self, location, description=description)
+            tournament = Tournament(name, location, description=description)
             json_file = tournament.__dict__
             json_tournament = JsonFile("tournaments.json", json_file)
             JsonFile.append_json(json_tournament)
@@ -46,28 +47,30 @@ class Tournament:
         else:
             return tournament_exist
 
-    def update_tournament(self):
+    @staticmethod
+    def update_tournament(tournament_new):
         """Mise à jour du tournoi en cours dans le json, à utiliser
         après current_tournament pour avoir toutes les données du tournoi"""
         json_tournament = JsonFile("tournaments.json", [])
         tournaments_list = JsonFile.read_json(json_tournament)
-        index = -7
+        index = 0
         for i, tournament in enumerate(tournaments_list):
-            if tournament.get("name") == self["name"]:
+            if tournament.get("name") == tournament_new["name"]:
                 index = i
         if index != -1:
-            tournaments_list[index] = self
+            tournaments_list[index] = tournament_new
         json_tournament.datas_json = tournaments_list
         JsonFile.create_json(json_tournament)
         print("\n==> Le fichier " + "tournaments.json" + " a été mis à jour")
 
-    def search_tournament(self):
+    @staticmethod
+    def search_tournament(tournament_name):
         """Test d'existance d'un tournoi"""
         json_tournaments = JsonFile("tournaments.json", [])
         try:
             tournaments = JsonFile.read_json(json_tournaments)
             for tournament in tournaments:
-                if tournament.get("name") == self:
+                if tournament.get("name") == tournament_name:
                     if tournament.get("rounds_list") == []:
                         retour = [True, tournament]
                         return retour
@@ -89,11 +92,12 @@ class Tournament:
                 current_tournament = tournament
                 return current_tournament
 
-    def last_number_of_round(self):
+    @staticmethod
+    def last_number_of_round_of_tournament(tournament_name):
         """Recherche et renvoi le numéro du dernier round d'un tournoi"""
         json_tournament = JsonFile("tournaments.json", [])
         tournaments = JsonFile.read_json(json_tournament)
         for tournament in tournaments:
-            if tournament.get("name") == self:
+            if tournament.get("name") == tournament_name:
                 last_round_number = tournament.get("current_round_number")
                 return last_round_number

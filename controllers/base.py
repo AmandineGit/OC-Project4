@@ -109,11 +109,12 @@ class Controllers:
                     Controllers.registrer_player_tournament(national_chess_id)
             continue
 
-    def create_player(self):
+    @staticmethod
+    def create_player(datas_player):
         """Si le player n'est pas encore connu,
         alors il est également enregistré dans le fichier players.json"""
         national_chess_id = Player.create_national_chess_id()
-        first_name, last_name, date_of_birth = self
+        first_name, last_name, date_of_birth = datas_player
         player = Player(first_name,
                         last_name,
                         date_of_birth,
@@ -121,7 +122,8 @@ class Controllers:
         Player.record_player(player, "players.json")
         return national_chess_id
 
-    def registrer_player_tournament(self):
+    @staticmethod
+    def registrer_player_tournament(national_chess_id):
         """Ajouter un player dans un tournoi
         Rechercher le tournoi en cours
         Ajouter le player dans la liste de players
@@ -141,8 +143,8 @@ class Controllers:
         for tournament in tournaments:
             if tournament.get("name") == tournament_name:
                 players_list = tournament["registred_players_list"]
-                if self not in players_list:
-                    players_list.append(self)
+                if national_chess_id not in players_list:
+                    players_list.append(national_chess_id)
                     tournament["registred_players_list"] = players_list
                     for tournamentnew in tournaments:
                         if tournamentnew.get("name") == tournament["name"]:
@@ -187,7 +189,7 @@ class Controllers:
                         View.display_error_nb_players()
                         Controllers.player_registration()
                     last_round_in_tournament\
-                        = (Tournament.last_number_of_round
+                        = (Tournament.last_number_of_round_of_tournament
                            (current_tournament.get("name")))
                     current_tournament["rounds_list"].append(round_name)
                     round_number = round_name[5:]
@@ -208,7 +210,8 @@ class Controllers:
     @staticmethod
     def name_of_round():
         """définie le nom d'un round"""
-        if os.path.exists("rounds.json"):
+        pathname = os.path.join("datas", "rounds.json")
+        if os.path.exists(pathname):
             last_round = Round.last_number_of_round()
             last_number = last_round[5:]
             last_number = int(last_number)
@@ -220,10 +223,11 @@ class Controllers:
         else:
             return "Round1"
 
-    def create_pairs(self, last_round_in_tournament):
+    @staticmethod
+    def create_pairs(current_tournament, last_round_in_tournament):
         """ Initialisation du round"""
         matchs_list = []
-        registred_players_list = self["registred_players_list"]
+        registred_players_list = current_tournament["registred_players_list"]
         current_tournament = Tournament.current_tournament()
         tournament_matchs_list = current_tournament["matchs_list"]
         if last_round_in_tournament == 0:
@@ -267,11 +271,12 @@ class Controllers:
         Tournament.update_tournament(current_tournament)
         return matchs_list
 
-    def sort_players(self):
+    @staticmethod
+    def sort_players(registred_players_list_notsorted):
         """Tri une liste de joeurs en fonction de leur score
         et renvoi la liste triée avec les scores"""
         registred_players_list = []
-        for player in self:
+        for player in registred_players_list_notsorted:
             datas_player = Player.search_player_by_id(player)
             registred_players_list.append([
                 datas_player["national_chess_id"],
@@ -350,10 +355,11 @@ class Controllers:
             matchs_list = matchs_list[1:]
         return completed_matchs_tuple
 
-    def player_score_keeping(self):
+    @staticmethod
+    def player_score_keeping(completed_matchs_tuple):
         """Calcul et met à jour le total_score des players dans players.json"""
         update_list_players = []
-        for match in self:
+        for match in completed_matchs_tuple:
             for player_score in match:
                 player, score = player_score
                 player_object = Player.search_player_by_id(player)

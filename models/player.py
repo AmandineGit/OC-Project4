@@ -30,9 +30,10 @@ class Player:
         json_player = JsonFile(name_file, json_file)
         JsonFile.append_json(json_player)
 
-    def search_player(self):
+    @staticmethod
+    def search_player(datas_player):
         """Test d'existance d'un user"""
-        first_name, last_name, date_of_birth = self
+        first_name, last_name, date_of_birth = datas_player
         json_player = JsonFile("players.json", [])
         players = JsonFile.read_json(json_player)
         if players is False:
@@ -43,7 +44,7 @@ class Player:
                     and player.get("first_name") == first_name)
                         and player.get("date_of_birth") == date_of_birth):
                     return player.get("national_chess_id")
-                return False
+            return False
 
     @staticmethod
     def create_national_chess_id():
@@ -55,22 +56,24 @@ class Player:
         next_national_chess_id = last_national_chess_id + 1
         return next_national_chess_id
 
-    def search_player_by_id(self):
+    @staticmethod
+    def search_player_by_id(id_player):
         """recherche un player par son ID et
         renvoi son l'object sous forme de dictionnaire,
         s'il n'existe pas il renvoie None"""
         json_player = JsonFile("players.json", [])
         players = JsonFile.read_json(json_player)
         for player in players:
-            if player.get("national_chess_id") == self:
+            if player.get("national_chess_id") == id_player:
                 return player
 
-    def update_player(self):
+    @staticmethod
+    def update_player(update_list_players):
         """met à jour un liste de players"""
         json_players = JsonFile("players.json", [])
         players_list = JsonFile.read_json(json_players)
         index = -7
-        for new_player in self:
+        for new_player in update_list_players:
             for i, player in enumerate(players_list):
                 if (player.get("national_chess_id")
                         == new_player["national_chess_id"]):
